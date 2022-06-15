@@ -8,7 +8,8 @@ implementation {
   components MainC, projectC as App;
   components new AMSenderC(AM_MY_MSG);
   components new AMReceiverC(AM_MY_MSG);
-  components new TimerMilliC();
+  components new TimerMilliC() as Pairing_Timer;
+  components new TimerMilliC() as Info_Timer;
   components ActiveMessageC;
   components new FakeSensorC();
   
@@ -22,7 +23,8 @@ implementation {
   //Radio Control
   App.SplitControl -> ActiveMessageC;
   //Timer interface
-  App.MilliTimer -> TimerMilliC;
+  App.Pairing_Timer -> Pairing_Timer;
+  App.Info_Timer -> Info_Timer;
   //Interfaces to access package fields
   App.Packet -> AMSenderC;
   //Fake Sensor read

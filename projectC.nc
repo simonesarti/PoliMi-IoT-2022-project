@@ -7,7 +7,8 @@ module projectC {
   uses {
     //****** INTERFACES *****//
 	interface Boot; 
-    interface Timer<TMilli> as MilliTimer;
+    interface Timer<TMilli> as Pairing_Timer;
+	interface Timer<TMilli> as Info_Timer;
 	    
     interface Receive;
     interface AMSend;
@@ -33,6 +34,9 @@ implementation {
   	uint16_t sensor_read;
 	msg_type_t type_message;
   	uint16_t ms=10000;
+
+	pairing_Tms=1000;
+	info_Tms=1000;
   	
   	
   	char strings[2][20];
@@ -215,8 +219,8 @@ implementation {
   		if (err == SUCCESS) {
       		
       		dbg("radio","Radio ON on mote%u!\n", TOS_NODE_ID);
-			broadcast_key();
-   	
+			pairing_timer.start(pairing_Tms)
+				
     	}else{
       		
       		dbgerror("radio", "Radio failed to start on node %u, retrying...\n",TOS_NODE_ID);
@@ -229,10 +233,26 @@ implementation {
     	dbg("radio", "Radio on mote%u stopped!\n", TOS_NODE_ID);
   	}
 
-  //***************** MilliTimer interface ********************//
+  //***************** Timer interfaces ********************//
   	
+	/* This event is triggered every time the timer fires.*/
+  	event void Pairing_Timer.fired() {
+
+    	dbg("timer", "\n\nTimer fired, counter is %hu.\n", counter);
+    
+    	if (locked) {
+      		
+      		dbg("radio_send", "Radio on mote%u was locked when timer fired, do nothing\n");
+
+    	}else {
+			
+			dbg("radio_send", "Radio on mote%u not locked, sending the INFO message\n");
+			broadcast_key();
+   		}  
+  	}
+
   	/* This event is triggered every time the timer fires.*/
-  	event void MilliTimer.fired() {
+  	event void Info_Timer.fired() {
 
     	dbg("timer", "\n\nTimer fired, counter is %hu.\n", counter);
     
