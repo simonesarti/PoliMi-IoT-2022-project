@@ -106,7 +106,7 @@ implementation {
 		
 		msg->senderID=TOS_NODE_ID;
 		strcpy(msg->key,key);
-		dbg("message", "Mote%u set fields for the PAIRING message. senderID:%u, key:%u \n",TOS_NODE_ID,msg->senderID,msg->key);
+		dbg("message", "Mote%u set fields for the PAIRING message. senderID:%u, key:%s \n",TOS_NODE_ID,msg->senderID,msg->key);
 		return msg;
 	}
 
