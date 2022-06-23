@@ -1,4 +1,5 @@
 #include "project.h"
+        //#include "project_serial.h"
 
 configuration projectAppC {}
 
@@ -8,10 +9,18 @@ implementation {
   components MainC, projectC as App;
   components new AMSenderC(AM_MY_MSG);
   components new AMReceiverC(AM_MY_MSG);
+  
   components new TimerMilliC() as Pairing_Timer;
   components new TimerMilliC() as Info_Timer;
-  components ActiveMessageC;
+  components new TimerMilliC() as OutOfRange_Timer;
+  
+  components new AlarmMilli32C() as FallingAlarm;
+  components new AlarmMilli32C() as MissingAlarm;
+
   components new FakeSensorC();
+
+  components ActiveMessageC;
+        //components SerialActiveMessageC;
   
   /****** INTERFACES *****/
   App.Boot -> MainC.Boot;
@@ -19,16 +28,31 @@ implementation {
   //Send and Receive interfaces
   App.Receive -> AMReceiverC;
   App.AMSend -> AMSenderC;
-  App.PacketAcknowledgements -> AMSenderC.Acks;
+  App.PacketAcknowledgements -> AMSenderC.Acks; //ActiveMessageC
+  
   //Radio Control
   App.SplitControl -> ActiveMessageC;
+  
   //Timer interface
   App.Pairing_Timer -> Pairing_Timer;
   App.Info_Timer -> Info_Timer;
+  App.OutOfRange_Timer -> OutOfRange_Timer;
+
+  //Alarm Interfaces
+  App.FallingAlarm -> FallingAlarm;
+  App.MissingAlarm -> MissingAlarm;
+  
   //Interfaces to access package fields
   App.Packet -> AMSenderC;
+  
   //Fake Sensor read
   App.Read -> FakeSensorC;
+
+          // Serial port components
+          //App.SerialControl -> SerialActiveMessageC;
+          //App.SerialAMSend -> SerialActiveMessageC.AMSend[AM_MY_MSG];
+          //App.SerialPacket -> SerialActiveMessageC;
+
 
 
 }

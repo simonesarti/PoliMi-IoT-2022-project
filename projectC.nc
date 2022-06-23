@@ -1,5 +1,7 @@
 #include "project.h"
 #include "Timer.h"
+#include "stdio.h"
+#include "string.h"
 
 
 module projectC {
@@ -9,12 +11,17 @@ module projectC {
 	interface Boot; 
     interface Timer<TMilli> as Pairing_Timer;
 	interface Timer<TMilli> as Info_Timer;
-	    
+	interface Timer<TMilli> as OutOfRange_Timer;
+	interface Alarm as FallingAlarm;
+	interface Alarm as MissingAlarm;
+
     interface Receive;
     interface AMSend;
     interface SplitControl;
     interface Packet;
 	interface PacketAcknowledgements;
+
+			//interface SerialControl;
 	 
 	//interface used to perform sensor reading (to get the value from a sensor)
 	interface Read<uint16_t> as Read;
@@ -33,11 +40,13 @@ implementation {
 	
   	uint16_t sensor_read;
 	msg_type_t type_message;
-  	uint16_t ms=10000;
 
-	pairing_Tms=1000;
-	info_Tms=1000;
-  	
+	pairing_Tms=5000; //5s
+	info_Tms=10000;	//10s
+	outofrange_Tms=60000; //60s
+
+	uint16_t last_x;
+	uint16_t last_y;
   	
   	char strings[2][20];
   	strings[0]="qwertyuiopasdfghjklz";
@@ -72,7 +81,7 @@ implementation {
 	
 	void set_default_string(){
 		
-		idx=uint8_t((TOS_NODE_ID-1)/2);
+		idx=uint8_t(TOS_NODE_ID/2);
 		key=strings[idx];
 		
 	}
@@ -91,7 +100,7 @@ implementation {
 		pairing_msg_t* msg = (pairing_msg_t*)call Packet.getPayload(&packet, sizeof(pairing_msg_t));
 		if (msg == NULL) {
 			dbgerror("message", "failed to create the PAIRING message\n");
-		return NULL;
+			return NULL;
 		}
 		
 		msg->senderID=TOS_NODE_ID;
@@ -104,7 +113,7 @@ implementation {
 		pairing_resp_t* msg = (pairing_resp_t*)call Packet.getPayload(&packet, sizeof(pairing_resp_t));
 		if (msg == NULL) {
 			dbgerror("message", "failed to create the PAIRING RESPONSE message\n");
-		return NULL;
+			return NULL;
 		}
 		
 		msg->responderID=TOS_NODE_ID;
@@ -118,9 +127,11 @@ implementation {
 		info_msg_t* msg = (info_msg_t*)call Packet.getPayload(&packet, sizeof(info_msg_t));
 		if (msg == NULL) {
 			dbgerror("message", "failed to create the INFO message\n");
-		return NULL;
+			return NULL;
 		}
 		
+		msg->senderID=TOS_NODE_ID;
+
 		call Read.read();
 		msg->x=sensor_read;
 		
@@ -128,6 +139,7 @@ implementation {
 		msg->y=sensor_read;
 		
 		call Read.read();
+		//from int16 to probability
 		if(sensor_read>=0                   && sensor_read<uint16_t(65536*0.3))	{msg->kinetic_status = STANDING;}
 		if(sensor_read>=uint16_t(65536*0.3) && sensor_read<uint16_t(65536*0.6))	{msg->kinetic_status = WALKING; }
 		if(sensor_read>=uint16_t(65536*0.6) && sensor_read<uint16_t(65536*0.9))	{msg->kinetic_status = RUNNING; }
@@ -219,7 +231,12 @@ implementation {
   		if (err == SUCCESS) {
       		
       		dbg("radio","Radio ON on mote%u!\n", TOS_NODE_ID);
-			pairing_timer.start(pairing_Tms)
+			if (!paired){
+				call Pairing_Timer.startPeriodic(pairing_Tms);
+			}
+			else{
+				call Info_Timer.startPeriodic(info_Tms);
+			}
 				
     	}else{
       		
@@ -238,7 +255,7 @@ implementation {
 	/* This event is triggered every time the timer fires.*/
   	event void Pairing_Timer.fired() {
 
-    	dbg("timer", "\n\nTimer fired, counter is %hu.\n", counter);
+    	dbg("timer", "\n\nTimer fired");
     
     	if (locked) {
       		
@@ -254,7 +271,7 @@ implementation {
   	/* This event is triggered every time the timer fires.*/
   	event void Info_Timer.fired() {
 
-    	dbg("timer", "\n\nTimer fired, counter is %hu.\n", counter);
+    	dbg("timer", "\n\nTimer fired");
     
     	if (locked) {
       		
@@ -267,11 +284,22 @@ implementation {
    		}  
   	}
   
+	/* This event is triggered every time the timer fires.*/
+  	event void OutOfRange_Timer.fired() {
+
+		dbg("timer", "\n\nTimer fired");
+		
+		dbg("missing_alarm", " Mote%u has not received messages from childer for more than 10s\n
+			last known position was (x:%u, y:%u)\n", TOS_NODE_ID,last_x,last_y);
+		call MissingAlarm.start(0);
+
+	}
+	
 
   //********************* AMSend interface ****************//
   event void AMSend.sendDone(message_t* buf, error_t err) {
 	/* This event is triggered when a message is sent */
-/*	
+	
 	// 1. Check if the packet is sent
 	if (err != SUCCESS){
 	    dbgerror("radio_send", "Packet sending from mote%u failed to be sent\n", TOS_NODE_ID);	
@@ -279,10 +307,12 @@ implementation {
 	else {
 		dbg("radio_send", "Packet sending from mote%u sent correctly\n", TOS_NODE_ID);
 		
-		locked = FALSE;
+		locked = false;
 		dbg("radio", "radio on mote%u has been unlocked\n",TOS_NODE_ID);
+	}
 		
-		{
+
+/*		
 		//parse the message
 		my_msg_t* rcm = (my_msg_t*)call Packet.getPayload(buf, sizeof(my_msg_t));
 		if (rcm == NULL){
@@ -330,19 +360,45 @@ implementation {
 
 			case(PAIRING):{
 				pairing_msg_t* msg = (pairing_msg_t*)payload;
-				//TODO
+				
+				if (strcmp(key,msg->key) == 0){
+					unicast_pairing_resp();
+				} 
+
 				break;
 			}
 
 			case(PAIRING_RESP):{
 				pairing_resp_t* msg = (pairing_resp_t*)payload;
-				//TODO
+				
+				paired_with = msg->responderID;
+				paired = true;
+
+				call Pairing_Timer.stop();
+				
+				if(mote_type==CHILDREN){
+					call Info_Timer.startPeriodic(info_Tms);
+				}
 				break;
 			}
 
 			case(INFO):{
 				info_msg_t* msg = (info_msg_t*)payload;
-				//TODO
+				
+				if(msg->senderID == paired_with){
+					
+					last_x = msg -> x;
+					last_y = msg -> y; 
+					
+					if(msg->kinematic_status == FALLING){
+						dbg("falling_alarm", " Children has fallen, go pick him up at position was (x:%u, y:%u)\n",
+						 TOS_NODE_ID,last_x,last_y);
+						call FallingAlarm.start(0);
+					}
+					
+					call OutOfRange_Timer.startOneShot(outofrange_Tms);
+				}
+
 				break;
 			}
 			

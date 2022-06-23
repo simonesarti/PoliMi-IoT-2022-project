@@ -3,6 +3,7 @@
 
 typedef struct info_msg 
 {
+	uint8_t senderID;
 	uint16_t x;
 	uint16_t y;
 	kinematic_status_t kinetic_status;
@@ -41,14 +42,14 @@ enum kinematic_status
 	STANDING = 0,
 	WALKING = 1,
 	RUNNING = 2,
-	FALLING =3
+	FALLING = 3
 	
 } kinematic_status_t;
 
 enum msg_type
 {
 	PAIRING = 0,
-	PAIRING_RESP=1,
+	PAIRING_RESP = 1,
 	INFO = 2
 	
 } msg_type_t;
