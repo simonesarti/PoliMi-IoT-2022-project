@@ -20,7 +20,7 @@ implementation {
   components new FakeSensorC();
 
   components ActiveMessageC;
-        //components SerialActiveMessageC;
+  //components SerialActiveMessageC;
   
   /****** INTERFACES *****/
   App.Boot -> MainC.Boot;
@@ -48,10 +48,10 @@ implementation {
   //Fake Sensor read
   App.Read -> FakeSensorC;
 
-          // Serial port components
-          //App.SerialControl -> SerialActiveMessageC;
-          //App.SerialAMSend -> SerialActiveMessageC.AMSend[AM_MY_MSG];
-          //App.SerialPacket -> SerialActiveMessageC;
+  // Serial port components
+  //App.SerialControl -> SerialActiveMessageC;
+  //App.SerialAMSend -> SerialActiveMessageC.AMSend[AM_MY_MSG];
+  //App.SerialPacket -> SerialActiveMessageC;
 
 
 
