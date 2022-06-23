@@ -48,6 +48,7 @@ implementation {
 
 	uint16_t last_x;
 	uint16_t last_y;
+	kinematic_status_t last_kinematic_status;
   	
   	char strings[2][20]={"qwertyuiopasdfghjklz","zlkjhgfdsapoiuytrewq"};
 
@@ -107,6 +108,11 @@ implementation {
 		msg->senderID=TOS_NODE_ID;
 		strcpy(msg->key,key);
 		dbg("message", "Mote%u set fields for the PAIRING message. senderID:%u, key:%s \n",TOS_NODE_ID,msg->senderID,msg->key);
+		
+		//request ack
+		//call PacketAcknowledgements.requestAck(&packet);
+		//dbg("ack", "Mote%u Setting ack flag for the PAIRING message\n",TOS_NODE_ID);		
+		
 		return msg;
 	}
 
@@ -120,13 +126,16 @@ implementation {
 		
 		msg->responderID=TOS_NODE_ID;
 		dbg("message", "Mote%u set fields for the PAIRING RESPONSE message, respID:%u \n",TOS_NODE_ID,msg->responderID);
-		
+
 		return msg;
 
+		//request ack
+		call PacketAcknowledgements.requestAck(&packet);
+		dbg("ack", "Mote%u Setting ack flag for the PAIRING RESPONSE message\n",TOS_NODE_ID);
 
 	}
 	
-	info_msg_t* fill_info_msg(){
+	info_msg_t* fill_info_msg(isResend){
 		
 		info_msg_t* msg = (info_msg_t*)call Packet.getPayload(&packet, sizeof(info_msg_t));
 		if (msg == NULL) {
@@ -136,23 +145,40 @@ implementation {
 		
 		msg->senderID=TOS_NODE_ID;
 
-		call Read.read();
-		msg->x=sensor_read;
-		
-		call Read.read();
-		msg->y=sensor_read;
-		
-		call Read.read();
-		//from int16 to probability
-		if(sensor_read>=0                   && sensor_read<(uint16_t)(65536*0.3))	{msg->kinematic_status = STANDING;}
-		if(sensor_read>=(uint16_t)(65536*0.3) && sensor_read<(uint16_t)(65536*0.6))	{msg->kinematic_status = WALKING; }
-		if(sensor_read>=(uint16_t)(65536*0.6) && sensor_read<(uint16_t)(65536*0.9))	{msg->kinematic_status = RUNNING; }
-		if(sensor_read>=(uint16_t)(65536*0.9) && sensor_read<(uint16_t)(65536)    )	{msg->kinematic_status = FALLING; }
+		if(!isResend){
+			
+			call Read.read();
+			msg->x=sensor_read;
+			last_x=sensor_read;
+			
+			call Read.read();
+			msg->y=sensor_read;
+			last_y=sensor_read;
+			
+			call Read.read();
+			//from int16 to probability
+			kinematic_status_t ks;
+			if(sensor_read>=(uint16_t)(65536*0.0) && sensor_read<(uint16_t)(65536*0.3))	{ks = STANDING;}
+			if(sensor_read>=(uint16_t)(65536*0.3) && sensor_read<(uint16_t)(65536*0.6))	{ks = WALKING; }
+			if(sensor_read>=(uint16_t)(65536*0.6) && sensor_read<(uint16_t)(65536*0.9))	{ks = RUNNING; }
+			if(sensor_read>=(uint16_t)(65536*0.9) && sensor_read<(uint16_t)(65536*1.0))	{ks = FALLING; }
+			msg->kinematic_status = ks;
+			last_kinematic_status = ks;
+		}
+		else{
+			msg->x=last_x;
+			msg->y=last_y;
+			msg->kinematic_status = last_kinematic_status;
+		}
 		
 		sensor_read=0;
 
-		dbg("message", "Mote%u set fields for the INFO message. senderID=%u,X=%u,Y=%u,status=%u, \n",TOS_NODE_ID,msg->senderID,msg->x,msg->y,msg->kinematic_status);
+		dbg("message", "Mote%u set fields for the INFO message. senderID=%u,X=%u,Y=%u,status=%u, isResend:%d,\n",TOS_NODE_ID,msg->senderID,msg->x,msg->y,msg->kinematic_status,isResend);
 		
+		//request ack
+		call PacketAcknowledgements.requestAck(&packet);
+		dbg("ack", "Mote%u Setting ack flag for the INFO message\n",TOS_NODE_ID);
+
 		return msg;		
 	}
 	
@@ -215,8 +241,7 @@ implementation {
 		if (len == sizeof(pairing_msg_t)) {return PAIRING;}
 		if (len == sizeof(pairing_resp_t)) {return PAIRING_RESP;}
 		if (len == sizeof(info_msg_t)) {return INFO;}
-		
-		return 999;
+		return ERROR;
 	}
 	
 //***************************MAIN***************************************************************************************************************************//
@@ -292,7 +317,7 @@ implementation {
     	}else {
 			
 			dbg("radio_send", "Radio on mote%u not locked, sending the INFO message\n");
-			send_info_message();
+			send_info_message(FALSE);
    		}  
   	}
   
@@ -306,6 +331,7 @@ implementation {
 
 	}
 	
+	//***************** Alarm interfaces ********************//
 	event void FallingAlarm.fired(){};
 	event void MissingAlarm.fired(){};
 	
@@ -323,6 +349,30 @@ implementation {
 		
 		locked = FALSE;
 		dbg("radio_status", "radio on mote%u has been unlocked\n",TOS_NODE_ID);
+	}
+
+
+	if(/*ack to INFO message*/){
+		
+		if (!call PacketAcknowledgements.wasAcked(buf)){
+			dbg("ack", "ack NOT RECEIVED by mote%u for INFO message, resending ...\n",TOS_NODE_ID);
+			send_info_message(TRUE);
+		}
+		else{
+			dbg("ack", "ack RECEIVED by mote%u for INFO message\n",TOS_NODE_ID);
+		}
+	}
+
+	if (/*ack to PAIRING RESPONSE message*/){
+		
+		if (!call PacketAcknowledgements.wasAcked(buf)){
+			dbg("ack", "ack NOT RECEIVED by mote%u for PAIRING RESPONSE message, resending ...\n",TOS_NODE_ID);
+			unicast_pairing_resp();
+		}
+		else{
+			dbg("ack", "ack RECEIVED by mote%u for PAIRING RESPONSE message\n",TOS_NODE_ID);
+		}
+
 	}
 
   }
@@ -353,11 +403,15 @@ implementation {
 			paired = TRUE;
 
 			call Pairing_Timer.stop();
+			dbg("pairing_timer","stopping PAIRING timer on mote%u\n",TOS_NODE_ID);
 			
 			if(mote_type==CHILDREN){
 				call Info_Timer.startPeriodic(info_Tms);
+				dbg("info_timer","starting INFO timer on mote%u\n",TOS_NODE_ID);
+
+				
 			}
-			dbg("message", "mote%u received PAIRING RESP from mote%u, sending PAIRING RESP Paired the two, start INFO TIMER\n",TOS_NODE_ID,paired_with);
+			dbg("message", "mote%u received PAIRING RESP from mote%u, sending PAIRING RESP. Paired the two, start INFO TIMER\n",TOS_NODE_ID,paired_with);
 		}
 
 		if(msg_type_received == INFO){
@@ -370,7 +424,7 @@ implementation {
 				last_y = msg -> y; 
 				
 				if(msg->kinematic_status == FALLING){
-					dbg("falling_alarm", " Children has fallen, go pick him up at position was (x:%u, y:%u)\n",TOS_NODE_ID,last_x,last_y);
+					dbg("falling_alarm", " Children has fallen, go pick him up at position (x:%u, y:%u)\n",TOS_NODE_ID,last_x,last_y);
 					call FallingAlarm.start();
 				}
 				
