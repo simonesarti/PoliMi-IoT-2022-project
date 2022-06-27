@@ -13,9 +13,6 @@ implementation {
   components new TimerMilliC() as Pairing_Timer;
   components new TimerMilliC() as Info_Timer;
   components new TimerMilliC() as OutOfRange_Timer;
-  
-  components new AlarmC() as FallingAlarm;
-  components new AlarmC() as MissingAlarm;
 
   components new FakeSensorC();
 
@@ -42,11 +39,7 @@ implementation {
   App.Packet -> AMSenderC;
   
   //Fake Sensor read
-  App.Read -> FakeSensorC;
-  
-  //Alarm Interfaces
-  App.FallingAlarm -> FallingAlarm;
-  App.MissingAlarm -> MissingAlarm;
+  App.FakeSensor -> FakeSensorC;
 
   // Serial port components
   //App.SerialControl -> SerialActiveMessageC;

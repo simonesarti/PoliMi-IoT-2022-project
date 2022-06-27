@@ -25,32 +25,44 @@ print ("Initializing simulator....")
 t.init()
 
 
-#simulation_outfile = "simulation.txt"
-#print "Saving sensors simulation output to:", simulation_outfile
-#simulation_out = open(simulation_outfile, "w")
+simulation_outfile = "simulation.txt"
+print("Saving sensors simulation output to:", simulation_outfile)
+simulation_out = open(simulation_outfile, "w")
+out = open(simulation_outfile, "w")
 
-#out = open(simulation_outfile, "w")
-out = sys.stdout
+#out = sys.stdout
 
 # Add debug channel
 
-channels = ["setting", "message", "radio_send", "radio_status","boot","pairing_timer","info_timer","radio_send","oor_timer","missing_alarm","falling_alarm"]
+channels = ["setting", "message", "pairing_message", "pairing_resp_message", "info_message", "ack", "pairing_ack", "pairing_resp_ack", "info_ack", "radio_send","radio_status","boot","pairing_timer","info_timer","radio_send","oor_timer","missing_alarm","falling_alarm"]
 #["Radio","Pairing","TimerPairing","Radio_ack","Radio_sent","Radio_rec","Radio_pack","OperationalMode","Info","Sensors"]
 for channel in channels:
-    print (f"Activate debug message on channel {channel}")
+    print ("Activate debug message on channel ", channel)
     t.addChannel(channel,out)
 
-node0, node1, node2, node2 = None, None, None, None
-time0,time1,time2,time3 = None, None, None, None
+print "Creating node 0...";
+node0 =t.getNode(0);
+time0 = 0*t.ticksPerSecond();
+node0.bootAtTime(time0);
+print ">>>Will boot at time",  time0/t.ticksPerSecond(), "[sec]";
 
-for i,time,node in zip([0,1,2,3],[time0,time1,time2,time3], [node0, node1, node2, node2]):
+print "Creating node 1...";
+node1 = t.getNode(1);
+time1 = 0*t.ticksPerSecond();
+node1.bootAtTime(time1);
+print ">>>Will boot at time", time1/t.ticksPerSecond(), "[sec]";
 
-    print (f"Creating node {i}...")
-    node = t.getNode(i)
-    time = 0*t.ticksPerSecond()
-    node.bootAtTime(time)
-    print (f">>>Will boot at time",  time/t.ticksPerSecond(), "[sec]")
+print "Creating node 2...";
+node2 = t.getNode(2);
+time2 = 0*t.ticksPerSecond();
+node2.bootAtTime(time2);
+print ">>>Will boot at time", time2/t.ticksPerSecond(), "[sec]";
 
+print "Creating node 3...";
+node3 = t.getNode(3);
+time3 = 0*t.ticksPerSecond();
+node3.bootAtTime(time3);
+print ">>>Will boot at time", time3/t.ticksPerSecond(), "[sec]";
 
 print("Creating radio channels...")
 f = open(topofile, "r")
@@ -86,7 +98,7 @@ for line in lines:
 print("Done!")
 
 for i in range(0, 4):
-    print (f">>>Creating noise model for node: {i}")
+    print (">>>Creating noise model for node: ",i)
     t.getNode(i).createNoiseModel()
 
 
@@ -100,6 +112,9 @@ while (t.time() < simtime + (200 * t.ticksPerSecond())):
 		if (t.time() >= (30 * t.ticksPerSecond())): 
 			node1.turnOff()
 			node1Off = True
+		if (t.time() >= (110 * t.ticksPerSecond())): 
+			node1.turnOn()
+			node1Off = False
 	
 print ("\n\n\nSimulation finished!")
 

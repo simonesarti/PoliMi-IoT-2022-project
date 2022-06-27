@@ -26,15 +26,21 @@ typedef enum{
 
 
 
-typedef struct my_msg_t{
-	msg_type_t msg_type;
-	uint8_t senderID;
-	char key[20];	
-	uint16_t x;
-	uint16_t y;
-	kinematic_status_t kinematic_status;
+typedef nx_struct my_msg_t{
+	nx_uint8_t msg_type;
+	nx_uint8_t senderID;
+	nx_uint8_t key[21];	
+	nx_uint16_t x;
+	nx_uint16_t y;
+	nx_uint8_t kinematic_status;
 }my_msg_t;
- 
+
+
+typedef struct info_data {
+  uint16_t x;
+  uint16_t y;
+  uint16_t kinematic_status ;
+} info_data;
 
 
 #endif

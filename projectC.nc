@@ -13,10 +13,8 @@ module projectC {
 	interface Timer<TMilli> as Pairing_Timer;
 	interface Timer<TMilli> as Info_Timer;
 	interface Timer<TMilli> as OutOfRange_Timer;
-	interface Alarm as FallingAlarm;
-	interface Alarm as MissingAlarm;
 
-	interface Read<uint16_t> as Read;
+	interface Read<info_data> as FakeSensor;
 
     interface Receive;
     interface AMSend;
@@ -35,11 +33,11 @@ implementation {
   	bool paired;
   	uint8_t paired_with;
 	uint8_t received_from;
-	char key[20];
+	char key[21];
   	mote_type_t mote_type;
   	kinematic_status_t kinematic_status;
 	
-  	uint16_t sensor_read;
+  	info_data sensor_read;
 	msg_type_t type_message;
 
 	uint16_t pairing_Tms=5000; //5s
@@ -50,7 +48,8 @@ implementation {
 	uint16_t last_y;
 	kinematic_status_t last_kinematic_status;
   	
-  	char strings[2][20]={"qwertyuiopasdfghjklz","zlkjhgfdsapoiuytrewq"};
+  	char string1[21]={"qwertyuiopasdfghjklz"};
+  	char string2[21]={"zlkjhgfdsapoiuytrewq"};
 
 
 //*****************FUNCTION DECLARATIONS*******************
@@ -75,15 +74,15 @@ implementation {
 		}else{
 			mote_type=CHILDREN;
 		}
-		dbg("setting", "Mote%u set to type %u\n",TOS_NODE_ID,mote_type);
+		dbg("setting", "Mote%hhu set to type %u\n",TOS_NODE_ID,mote_type);
 	}
 	
 	void set_default_string(){
 		
-		uint8_t idx=(uint8_t)(TOS_NODE_ID/2);
-		strcpy(key,strings[idx]);
-		
-		dbg("setting", "Mote%u set key to %s\n",TOS_NODE_ID,key);
+		if(((uint8_t)(TOS_NODE_ID/2))==0){strcpy(key,string1);}
+		if(((uint8_t)(TOS_NODE_ID/2))==1){strcpy(key,string2);}
+				
+		dbg("setting", "Mote%hhu set key to %s\n",TOS_NODE_ID,key);
 	}
 	
 	void set_initial_parameters(){
@@ -96,7 +95,6 @@ implementation {
 	}
 
 	my_msg_t* fill_pairing_msg(){
-		
 		//create the message
 		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
 		if (msg == NULL) {
@@ -112,7 +110,7 @@ implementation {
 		msg->y = 0;
 		msg->kinematic_status = NONE;
 		
-		dbg("pairing_message", "Mote%u set fields for the PAIRING message. senderID:%u, key:%s, x:%u, y:%u, kin_status:%u \n",
+		dbg("pairing_message", "Mote%hhu set fields for the PAIRING message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%u \n",
 		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status);
 		
 		//request ack
@@ -139,7 +137,7 @@ implementation {
 		msg->y = 0;
 		msg->kinematic_status = NONE;
 		
-		dbg("pairing_resp_message", "Mote%u set fields for the PAIRING RESPONSE message, senderID:%u, key:%s, x:%u, y:%u, kin_status:%u \n",
+		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%u \n",
 		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status);
 
 		//request ack
@@ -165,23 +163,21 @@ implementation {
 
 		if(!isResend){
 			
-			call Read.read();
-			msg->x=sensor_read;
-			last_x=sensor_read;
+			call FakeSensor.read();
 			
-			call Read.read();
-			msg->y=sensor_read;
-			last_y=sensor_read;
+			msg->x=sensor_read->x;
+			last_x=sensor_read->x;
 			
-			call Read.read();
+			msg->y=sensor_read->y;
+			last_y=sensor_read->y;
+			
 			//from int16 to probability
-			if(sensor_read>=(uint16_t)(65536*0.0) && sensor_read<(uint16_t)(65536*0.3))	{last_kinematic_status = STANDING;}
-			if(sensor_read>=(uint16_t)(65536*0.3) && sensor_read<(uint16_t)(65536*0.6))	{last_kinematic_status = WALKING; }
-			if(sensor_read>=(uint16_t)(65536*0.6) && sensor_read<(uint16_t)(65536*0.9))	{last_kinematic_status = RUNNING; }
-			if(sensor_read>=(uint16_t)(65536*0.9) && sensor_read<(uint16_t)(65536*1.0))	{last_kinematic_status = FALLING; }
+			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.0) && sensor_read->kinematic_status <(uint16_t)(65536*0.3))	{last_kinematic_status = STANDING;}
+			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.3) && sensor_read->kinematic_status <(uint16_t)(65536*0.6))	{last_kinematic_status = WALKING; }
+			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.6) && sensor_read->kinematic_status <(uint16_t)(65536*0.9))	{last_kinematic_status = RUNNING; }
+			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.9) && sensor_read->kinematic_status <(uint16_t)(65536*1.0))	{last_kinematic_status = FALLING; }
 			msg->kinematic_status = last_kinematic_status;
 
-			sensor_read=0;
 		}
 		else{
 			msg->x=last_x;
@@ -189,29 +185,28 @@ implementation {
 			msg->kinematic_status = last_kinematic_status;
 		}
 		
-		dbg("info_message", "Mote%u set fields for the INFO message. senderID:%u, key:%s, x:%u, y:%u, kin_status:%u, isResend:%u \n",
+		dbg("info_message", "Mote%hhu set fields for the INFO message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%u, isResend:%u \n",
 		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status, isResend);
 		
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
-		dbg("info_ack", "Mote%u Setting ack flag for the INFO message\n",TOS_NODE_ID);
+		dbg("info_ack", "Mote%hhu Setting ack flag for the INFO message\n",TOS_NODE_ID);
 
 		return msg;		
 	}
 	
 	void send_broadcast_key(){
 	
-		my_msg_t* msg=fill_pairing_msg();
+		my_msg_t* msg = fill_pairing_msg();
 		
 		if (msg != NULL) {
 			
 			if (call AMSend.send(AM_BROADCAST_ADDR, &packet, sizeof(my_msg_t)) == SUCCESS) {
 				
-				dbg("radio_send", "mote%u is broadcasting the PAIRINIG message\n", TOS_NODE_ID);
-				dbg_clear("radio_send", " at time %s \n", sim_time_string());	
-				
+				dbg("radio_send", "mote%hhu is broadcasting the PAIRINIG message at time %s\n", TOS_NODE_ID, sim_time_string());	
+				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
 				locked = TRUE;
-				dbg("radio_status", "radio on mote%u has been locked\n",TOS_NODE_ID);
+				
 			}
 		}
 	}
@@ -225,11 +220,10 @@ implementation {
 			
 			if (call AMSend.send(received_from, &packet, sizeof(my_msg_t)) == SUCCESS) {
 				
-				dbg("radio_send", "mote%u sending unicast reply to the PAIRINIG message to mote%u\n", TOS_NODE_ID,received_from);
-				dbg_clear("radio_send", " at time %s \n", sim_time_string());	
-				
+				dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,received_from, sim_time_string());
+				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
 				locked = TRUE;
-				dbg("radio_status", "radio on mote%u has been locked\n",TOS_NODE_ID);
+				
 			}
 			
 			
@@ -244,11 +238,10 @@ implementation {
 			
 			if (call AMSend.send(paired_with, &packet, sizeof(my_msg_t)) == SUCCESS) {
 				
-				dbg("radio_send", "mote%u is broadcasting the INFO message\n", TOS_NODE_ID);
-				dbg_clear("radio_send", " at time %s \n", sim_time_string());	
-				
+				dbg("radio_send", "mote%hhu is sending the INFO message at time %s\n", TOS_NODE_ID, sim_time_string());
+				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
 				locked = TRUE;
-				dbg("radio_status", "radio on mote%u has been locked\n",TOS_NODE_ID);
+				
 			}
 		}
 		
@@ -260,9 +253,9 @@ implementation {
 //***************** Boot interface ********************//
 	event void Boot.booted() {
 		
-		dbg("boot","Application booted on node %u.\n",TOS_NODE_ID);
-		call SplitControl.start();
+		dbg("boot","Application booted on node %hhu.\n",TOS_NODE_ID);
 		set_initial_parameters();
+		call SplitControl.start();
 		
   	}
 
@@ -271,15 +264,17 @@ implementation {
   		
   		if (err == SUCCESS) {
       		
-      		dbg("radio_status","Radio ON on mote%u!\n", TOS_NODE_ID);
+      		dbg("radio_status","Radio ON on mote%hhu!\n", TOS_NODE_ID);
 			if (!paired){
+				dbg("pairing_timer","Started PAIRING TIMER on mote%hhu (not already paired)\n",TOS_NODE_ID);
 				call Pairing_Timer.startPeriodic(pairing_Tms);
-				dbg("pairing_timer","Started PAIRING TIMER on mote%u (not already paired)\n",TOS_NODE_ID);
+				
 			}
 			else{
 				if(mote_type==CHILDREN){
+					dbg("info_timer","Started INFO TIMER on mote%hhu (already paired)\n",TOS_NODE_ID);
 					call Info_Timer.startPeriodic(info_Tms);
-					dbg("info_timer","Started INFO TIMER on mote%u (already paired)\n",TOS_NODE_ID);
+					
 
 				}
 				
@@ -287,14 +282,14 @@ implementation {
 				
     	}else{
       		
-      		dbgerror("radio_status", "Radio failed to start on node %u, retrying...\n",TOS_NODE_ID);
+      		dbgerror("radio_status", "Radio failed to start on node %hhu, retrying...\n",TOS_NODE_ID);
       		call SplitControl.start();
     	}
     	
   	}
   
   	event void SplitControl.stopDone(error_t err){
-    	dbg("radio_status", "Radio on mote%u stopped!\n", TOS_NODE_ID);
+    	dbg("radio_status", "Radio on mote%hhu stopped!\n", TOS_NODE_ID);
   	}
 
 //***************** Timer interfaces ********************//
@@ -302,13 +297,13 @@ implementation {
 	/* This event is triggered every time the timer fires.*/
   	event void Pairing_Timer.fired() {
 
-    	dbg("pairing_timer", "Timer fired\n");
+    	dbg("pairing_timer", "pairing Timer on mote%hhu fired\n", TOS_NODE_ID);
     
     	if (locked) {
-      		dbg("radio_send", "Radio on mote%u was locked when timer fired, do nothing\n");
+      		dbg("radio_send", "Radio on mote%hhu was locked when timer fired, do nothing\n", TOS_NODE_ID);
 
     	}else {
-			dbg("radio_send", "Radio on mote%u not locked, sending the PAIRING message\n");
+			dbg("radio_send", "Radio on mote%hhu not locked, sending the PAIRING message\n", TOS_NODE_ID);
 			send_broadcast_key();
    		}  
   	}
@@ -316,13 +311,13 @@ implementation {
   	/* This event is triggered every time the timer fires.*/
   	event void Info_Timer.fired() {
 
-    	dbg("info_timer", "Timer fired\n");
+    	dbg("info_timer", "info Timer on mote%hhu fired\n", TOS_NODE_ID);
     
     	if (locked) {
-      		dbg("radio_send", "Radio on mote%u was locked when timer fired, do nothing\n");
+      		dbg("radio_send", "Radio on mote%hhu was locked when timer fired, do nothing\n", TOS_NODE_ID);
 
     	}else {
-			dbg("radio_send", "Radio on mote%u not locked, sending the INFO message\n");
+			dbg("radio_send", "Radio on mote%hhu not locked, sending the INFO message\n", TOS_NODE_ID);
 			send_info_message(FALSE);
    		}  
   	}
@@ -330,17 +325,12 @@ implementation {
 	/* This event is triggered every time the timer fires.*/
   	event void OutOfRange_Timer.fired() {
 
-		dbg("oor_timer", "Timer fired\n");
+		dbg("oor_timer", "out_of_range Timer on mote%hhu fired\n", TOS_NODE_ID);
 		
-		dbg("missing_alarm", " Mote%u has not received messages from childer for more than 10s. Last known position was (x:%u, y:%u)\n",
+		dbg("missing_alarm", " MISSING ALERT: Mote%hhu has not received messages from childer for more than 60s. Last known position was (x:%u, y:%u)\n",
 		 TOS_NODE_ID, last_x, last_y);
-		call MissingAlarm.start();
 
 	}
-	
-	//***************** Alarm interfaces ********************//
-	event void FallingAlarm.fired(){};
-	event void MissingAlarm.fired(){};
 	
 
   //********************* AMSend interface ****************//
@@ -349,14 +339,15 @@ implementation {
 	
 		// 1. Check if the packet is sent
 		if (err != SUCCESS){
-			dbgerror("radio_send", "Packet sending from mote%u failed to be sent\n", TOS_NODE_ID);
+			dbgerror("radio_send", "Packet sending from mote%hhu failed to be sent\n", TOS_NODE_ID);
 			return;	
 		}
 		else {
-			dbg("radio_send", "Packet sending from mote%u sent correctly\n", TOS_NODE_ID);
+			dbg("radio_send", "Packet sending from mote%hhu sent correctly\n", TOS_NODE_ID);
 			
+			dbg("radio_status", "radio on mote%hhu has been unlocked\n",TOS_NODE_ID);
 			locked = FALSE;
-			dbg("radio_status", "radio on mote%u has been unlocked\n",TOS_NODE_ID);
+			
 
 
 			//open-close section just because tinyos doesn't like the debug otherwise
@@ -373,21 +364,24 @@ implementation {
 			if (!call PacketAcknowledgements.wasAcked(buf)){
 				
 				if(msg->msg_type == PAIRING_RESP){ 
+					dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
 					send_pairing_resp();
-					dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%u, resending...\n",TOS_NODE_ID);
+					
 				}
 				if(msg->msg_type == INFO){
+					dbg("info_ack","INFO ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
 					send_info_message(TRUE); 
-					dbg("info_ack","INFO ACK not received by mote%u, resending...\n",TOS_NODE_ID);
+					
 				}
 			}
 			else{
 				
 				if(msg->msg_type == PAIRING_RESP){
-					dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%u\n",TOS_NODE_ID);
+					dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%hhu\n",TOS_NODE_ID);
 					if(mote_type == CHILDREN){
+						dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
 						call Info_Timer.startPeriodic(info_Tms);
-						dbg("info_timer","starting INFO timer on mote%u\n",TOS_NODE_ID);	
+						
 					}
 				}
 				if (msg->msg_type == INFO){
@@ -415,14 +409,15 @@ implementation {
 			//get the payload
 			my_msg_t* rec_msg = (my_msg_t*)payload;
 			
-
+			dbg("message", "mote%hhu received from mote%hhu\n", TOS_NODE_ID, rec_msg -> senderID);
 			if(rec_msg->msg_type == PAIRING){
 			
 				if (strcmp(key, rec_msg->key) == 0){
 					received_from = rec_msg->senderID;
+					dbg("message", "mote%hhu received PAIRING MESSAGE from mote%hhu with same key, sending PAIRING RESP\n",TOS_NODE_ID, received_from);
 					send_pairing_resp();
-					dbg("message", "mote%u received PAIRING MESSAGE from mote%u, sending PAIRING RESP\n",
-					TOS_NODE_ID, received_from);
+					
+					
 				} 
 
 			}
@@ -431,30 +426,27 @@ implementation {
 				
 				paired_with = rec_msg->senderID;
 				paired = TRUE;
-
-				call Pairing_Timer.stop();
-				dbg("pairing_timer","stopping PAIRING timer on mote%u\n",TOS_NODE_ID);
 				
-				dbg("message", "mote%u received PAIRING RESP from mote%u. Paired the two\n",
-				TOS_NODE_ID,paired_with);
+				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Paired the two\n",TOS_NODE_ID,paired_with);
+				dbg("pairing_timer","stopping PAIRING timer on mote%hhu\n",TOS_NODE_ID);
+				call Pairing_Timer.stop();
+				
 			}
 
 			if(rec_msg->msg_type == INFO){
 				
 				if(rec_msg->senderID == paired_with){
 					
-					dbg("info_message", "mote%u received INFO from PAIRED mote%u\n",TOS_NODE_ID, paired_with);
+					dbg("info_message", "mote%hhu received INFO from PAIRED mote%hhu\n",TOS_NODE_ID, paired_with);
 					last_x = rec_msg->x;
 					last_y = rec_msg->y; 
 					
 					if(rec_msg->kinematic_status == FALLING){
-						dbg("falling_alarm", " Children has fallen, go pick him up at position (x:%u, y:%u)\n",
-						TOS_NODE_ID,last_x,last_y);
-						call FallingAlarm.start();
+						dbg("falling_alarm", " FALLING ALERT: Child has fallen, go pick him up at position (x:%hhu, y:%u)\n",TOS_NODE_ID,last_x,last_y);
 					}
-					
+					dbg("oor_timer", "mote%hhu started OutOfRange TIMER countdown\n",TOS_NODE_ID);
 					call OutOfRange_Timer.startOneShot(outofrange_Tms);
-					dbg("oor_timer", "mote%u started OutOfRange TIMER countdown\n",TOS_NODE_ID);
+					
 
 					
 				}
@@ -469,8 +461,8 @@ implementation {
 
     //***************** Read interface **********************//
 	
-	/* This event is triggered when the fake sensor finish to read (after a Read.read()) */
-	event void Read.readDone(error_t result, uint16_t data){
+	/* This event is triggered when the fake sensor finish to read (after a FakeSensor.read()) */
+	event void FakeSensor.readDone(error_t result, info_data data){
 		
 		sensor_read=data;
 		
