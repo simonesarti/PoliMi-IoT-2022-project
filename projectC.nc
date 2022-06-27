@@ -371,15 +371,30 @@ implementation {
 			return;
 		}
 
-		//
+		//deal with acks
 		if (!call PacketAcknowledgements.wasAcked(buf)){
 			
-			if(msg->msg_type == PAIRING_RESP){}
-			if(msg->msg_type == INFO){}
+			if(msg->msg_type == PAIRING_RESP){ 
+				send_pairing_resp();
+				dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%u, resending...\n",TOS_NODE_ID);
+			}
+			if(msg->msg_type == INFO){
+				send_info_message(TRUE); 
+				dbg("info_ack","INFO ACK not received by mote%u, resending...\n",TOS_NODE_ID);
+			}
 		}
 		else{
-			(msg->msg_type == PAIRING_RESP){}
-			(msg->msg_type == INFO){}
+			
+			if(msg->msg_type == PAIRING_RESP){
+				dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%u\n",TOS_NODE_ID);
+				if(mote_type == CHILDREN){
+					call Info_Timer.startPeriodic(info_Tms);
+					dbg("info_timer","starting INFO timer on mote%u\n",TOS_NODE_ID);	
+				}
+			}
+			if (msg->msg_type == INFO){
+				dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
+			}
 		}
 	}
 
@@ -405,7 +420,8 @@ implementation {
 			if(rec_msg->msg_type == PAIRING){
 			
 				if (strcmp(key, rec_msg->key) == 0){
-					received_from = rec_msg->senderID;send();
+					received_from = rec_msg->senderID;
+					send_pairing_resp();
 					dbg("message", "mote%u received PAIRING MESSAGE from mote%u, sending PAIRING RESP\n",
 					TOS_NODE_ID, received_from);
 				} 
@@ -420,11 +436,7 @@ implementation {
 				call Pairing_Timer.stop();
 				dbg("pairing_timer","stopping PAIRING timer on mote%u\n",TOS_NODE_ID);
 				
-				if(mote_type==CHILDREN){
-					call Info_Timer.startPeriodic(info_Tms);
-					dbg("info_timer","starting INFO timer on mote%u\n",TOS_NODE_ID);	
-				}
-				dbg("message", "mote%u received PAIRING RESP from mote%u. Paired the two, start INFO TIMER\n",
+				dbg("message", "mote%u received PAIRING RESP from mote%u. Paired the two\n",
 				TOS_NODE_ID,paired_with);
 			}
 
