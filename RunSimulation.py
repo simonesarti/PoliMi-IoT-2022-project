@@ -112,9 +112,6 @@ while (t.time() < simtime + (200 * t.ticksPerSecond())):
 		if (t.time() >= (30 * t.ticksPerSecond())): 
 			node1.turnOff()
 			node1Off = True
-		if (t.time() >= (110 * t.ticksPerSecond())): 
-			node1.turnOn()
-			node1Off = False
 	
 print ("\n\n\nSimulation finished!")
 

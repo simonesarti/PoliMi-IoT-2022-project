@@ -33,7 +33,7 @@ implementation {
   	bool paired;
   	uint8_t paired_with;
 	uint8_t received_from;
-	char key[21];
+	char key[21];	//last for \0 character
   	mote_type_t mote_type;
   	kinematic_status_t kinematic_status;
 	
@@ -48,7 +48,7 @@ implementation {
 	uint16_t last_y;
 	kinematic_status_t last_kinematic_status;
   	
-  	char string1[21]={"qwertyuiopasdfghjklz"};
+  	char string1[21]={"qwertyuiopasdfghjklz"}; 
   	char string2[21]={"zlkjhgfdsapoiuytrewq"};
 
 
@@ -65,6 +65,10 @@ implementation {
 	void send_pairing_resp();
 	void send_info_message(bool isResend);
 	
+	const char* string_mote_type(mote_type_t mote_type);
+	const char* string_msg_type(msg_type_t msg_type);
+	const char* string_ks(kinematic_status_t ks);
+	
 //*****************FUNCTION DEFINITIONS*******************
 	
 	void set_mote_type(){
@@ -72,9 +76,9 @@ implementation {
 		if(TOS_NODE_ID%2==0){
 			mote_type=PARENT;
 		}else{
-			mote_type=CHILDREN;
+			mote_type=CHILD;
 		}
-		dbg("setting", "Mote%hhu set to type %u\n",TOS_NODE_ID,mote_type);
+		dbg("setting", "Mote%hhu set to type %s\n",TOS_NODE_ID,string_mote_type(mote_type));
 	}
 	
 	void set_default_string(){
@@ -110,8 +114,8 @@ implementation {
 		msg->y = 0;
 		msg->kinematic_status = NONE;
 		
-		dbg("pairing_message", "Mote%hhu set fields for the PAIRING message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%u \n",
-		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status);
+		dbg("pairing_message", "Mote%hhu set fields for the PAIRING message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s \n",
+		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status));
 		
 		//request ack
 		//call PacketAcknowledgements.requestAck(&packet);
@@ -137,8 +141,8 @@ implementation {
 		msg->y = 0;
 		msg->kinematic_status = NONE;
 		
-		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%u \n",
-		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status);
+		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s \n",
+		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status));
 
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
@@ -185,8 +189,8 @@ implementation {
 			msg->kinematic_status = last_kinematic_status;
 		}
 		
-		dbg("info_message", "Mote%hhu set fields for the INFO message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%u, isResend:%u \n",
-		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status, isResend);
+		dbg("info_message", "Mote%hhu set fields for the INFO message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s, isResend:%u \n",
+		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status), isResend);
 		
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
@@ -211,7 +215,6 @@ implementation {
 		}
 	}
 	
-	// TODO check received_from
 	void send_pairing_resp(){
 		
 		my_msg_t* msg = fill_pairing_resp();
@@ -247,6 +250,25 @@ implementation {
 		
 	}
 	
+	const char* string_mote_type(mote_type_t mote_type){
+		if(mote_type==PARENT){return "PARENT";}
+		if(mote_type==CHILD){return "CHILD";}
+	}
+	
+	const char* string_msg_type(msg_type_t msg_type){
+		if(msg_type==PAIRING){return "PAIRING";}
+		if(msg_type==PAIRING_RESP){return "PAIRING_RESP";}
+		if(msg_type==INFO){return "INFO";}
+	}
+	
+	const char* string_ks(kinematic_status_t ks){
+		if(ks==NONE){return "NONE";}
+		if(ks==STANDING){return "STANDING";}
+		if(ks==WALKING){return "WALKING";}
+		if(ks==RUNNING){return "RUNNING";}
+		if(ks==FALLING){return "FALLING";}
+	}
+	
 //***************************MAIN***************************************************************************************************************************//
 
   
@@ -271,7 +293,7 @@ implementation {
 				
 			}
 			else{
-				if(mote_type==CHILDREN){
+				if(mote_type==CHILD){
 					dbg("info_timer","Started INFO TIMER on mote%hhu (already paired)\n",TOS_NODE_ID);
 					call Info_Timer.startPeriodic(info_Tms);
 					
@@ -327,7 +349,7 @@ implementation {
 
 		dbg("oor_timer", "out_of_range Timer on mote%hhu fired\n", TOS_NODE_ID);
 		
-		dbg("missing_alarm", " MISSING ALERT: Mote%hhu has not received messages from childer for more than 60s. Last known position was (x:%u, y:%u)\n",
+		dbg("missing_alarm", " MISSING ALERT: Mote%hhu has not received messages from child for more than 60s. Last known position was (x:%u, y:%u)\n",
 		 TOS_NODE_ID, last_x, last_y);
 
 	}
@@ -378,7 +400,7 @@ implementation {
 				
 				if(msg->msg_type == PAIRING_RESP){
 					dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%hhu\n",TOS_NODE_ID);
-					if(mote_type == CHILDREN){
+					if(mote_type == CHILD){
 						dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
 						call Info_Timer.startPeriodic(info_Tms);
 						
@@ -427,7 +449,7 @@ implementation {
 				paired_with = rec_msg->senderID;
 				paired = TRUE;
 				
-				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Paired the two\n",TOS_NODE_ID,paired_with);
+				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Paired with it\n",TOS_NODE_ID,paired_with);
 				dbg("pairing_timer","stopping PAIRING timer on mote%hhu\n",TOS_NODE_ID);
 				call Pairing_Timer.stop();
 				

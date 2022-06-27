@@ -7,7 +7,7 @@ typedef enum {
 
 typedef enum {
 	PARENT = 0,
-	CHILDREN = 1
+	CHILD = 1
 }mote_type_t;
 
 typedef enum{
