@@ -14,7 +14,7 @@ module projectC {
 	interface Timer<TMilli> as Info_Timer;
 	interface Timer<TMilli> as OutOfRange_Timer;
 
-	interface Read<info_data> as FakeSensor;
+	interface Read<info_data_t> as FakeSensor;
 
     interface Receive;
     interface AMSend;
@@ -37,7 +37,7 @@ implementation {
   	mote_type_t mote_type;
   	kinematic_status_t kinematic_status;
 	
-  	info_data sensor_read;
+  	info_data_t sensor_read;
 	msg_type_t type_message;
 
 	uint16_t pairing_Tms=5000; //5s
@@ -165,17 +165,17 @@ implementation {
 			
 			call FakeSensor.read();
 			
-			msg->x=sensor_read->x;
-			last_x=sensor_read->x;
+			msg->x=sensor_read.x;
+			last_x=sensor_read.x;
 			
-			msg->y=sensor_read->y;
-			last_y=sensor_read->y;
+			msg->y=sensor_read.y;
+			last_y=sensor_read.y;
 			
 			//from int16 to probability
-			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.0) && sensor_read->kinematic_status <(uint16_t)(65536*0.3))	{last_kinematic_status = STANDING;}
-			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.3) && sensor_read->kinematic_status <(uint16_t)(65536*0.6))	{last_kinematic_status = WALKING; }
-			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.6) && sensor_read->kinematic_status <(uint16_t)(65536*0.9))	{last_kinematic_status = RUNNING; }
-			if(sensor_read->kinematic_status >=(uint16_t)(65536*0.9) && sensor_read->kinematic_status <(uint16_t)(65536*1.0))	{last_kinematic_status = FALLING; }
+			if(sensor_read.kinematic_status >=(uint16_t)(65536*0.0) && sensor_read.kinematic_status <(uint16_t)(65536*0.3))	{last_kinematic_status = STANDING;}
+			if(sensor_read.kinematic_status >=(uint16_t)(65536*0.3) && sensor_read.kinematic_status <(uint16_t)(65536*0.6))	{last_kinematic_status = WALKING; }
+			if(sensor_read.kinematic_status >=(uint16_t)(65536*0.6) && sensor_read.kinematic_status <(uint16_t)(65536*0.9))	{last_kinematic_status = RUNNING; }
+			if(sensor_read.kinematic_status >=(uint16_t)(65536*0.9) && sensor_read.kinematic_status <(uint16_t)(65536*1.0))	{last_kinematic_status = FALLING; }
 			msg->kinematic_status = last_kinematic_status;
 
 		}
@@ -462,7 +462,7 @@ implementation {
     //***************** Read interface **********************//
 	
 	/* This event is triggered when the fake sensor finish to read (after a FakeSensor.read()) */
-	event void FakeSensor.readDone(error_t result, info_data data){
+	event void FakeSensor.readDone(error_t result, info_data_t data){
 		
 		sensor_read=data;
 		

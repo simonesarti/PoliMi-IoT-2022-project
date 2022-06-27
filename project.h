@@ -36,11 +36,11 @@ typedef nx_struct my_msg_t{
 }my_msg_t;
 
 
-typedef struct info_data {
+typedef struct infoData {
   uint16_t x;
   uint16_t y;
-  uint16_t kinematic_status ;
-} info_data;
+  uint16_t kinematic_status;
+} info_data_t;
 
 
 #endif
