@@ -60,11 +60,11 @@ implementation {
 	
 	my_msg_t* fill_pairing_msg();
 	my_msg_t* fill_pairing_resp();  
-	my_msg_t* fill_info_msg();
+	my_msg_t* fill_info_msg(bool isResend);
 	
 	void send_broadcast_key();
 	void send_pairing_resp();
-	void send_info_message();
+	void send_info_message(bool isResend);
 	
 //*****************FUNCTION DEFINITIONS*******************
 	
@@ -98,7 +98,7 @@ implementation {
 	my_msg_t* fill_pairing_msg(){
 		
 		//create the message
-		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(pairimy_msg_tng_msg_t));
+		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
 		if (msg == NULL) {
 			dbgerror("pairing_message", "failed to create the PAIRING message\n");
 			return NULL;
@@ -110,7 +110,7 @@ implementation {
 		strcpy(msg->key, key);
 		msg->x = 0;
 		msg->y = 0;
-		msg->kinematic_status -> NONE;
+		msg->kinematic_status = NONE;
 		
 		dbg("pairing_message", "Mote%u set fields for the PAIRING message. senderID:%u, key:%s, x:%u, y:%u, kin_status:%u \n",
 		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status);
@@ -134,10 +134,10 @@ implementation {
 		//fill fields
 		msg->msg_type = PAIRING_RESP;
 		msg->senderID = TOS_NODE_ID;
-		msg->key = NULL;
+		strcpy(msg->key, "xxxxxxxxxxxxxxxxxxxx");
 		msg->x = 0;
 		msg->y = 0;
-		msg->kinematic_status -> NONE;
+		msg->kinematic_status = NONE;
 		
 		dbg("pairing_resp_message", "Mote%u set fields for the PAIRING RESPONSE message, senderID:%u, key:%s, x:%u, y:%u, kin_status:%u \n",
 		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, msg->kinematic_status);
@@ -149,7 +149,7 @@ implementation {
 		return msg;
 	}
 	
-	my_msg_t* fill_info_msg(isResend){
+	my_msg_t* fill_info_msg(bool isResend){
 		
 		//create the message
 		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
@@ -161,7 +161,7 @@ implementation {
 		//fill fields
 		msg->msg_type = INFO;
 		msg->senderID = TOS_NODE_ID;
-		msg->key = NULL;
+		strcpy(msg->key, "xxxxxxxxxxxxxxxxxxxx");
 
 		if(!isResend){
 			
@@ -175,13 +175,11 @@ implementation {
 			
 			call Read.read();
 			//from int16 to probability
-			kinematic_status_t ks;
-			if(sensor_read>=(uint16_t)(65536*0.0) && sensor_read<(uint16_t)(65536*0.3))	{ks = STANDING;}
-			if(sensor_read>=(uint16_t)(65536*0.3) && sensor_read<(uint16_t)(65536*0.6))	{ks = WALKING; }
-			if(sensor_read>=(uint16_t)(65536*0.6) && sensor_read<(uint16_t)(65536*0.9))	{ks = RUNNING; }
-			if(sensor_read>=(uint16_t)(65536*0.9) && sensor_read<(uint16_t)(65536*1.0))	{ks = FALLING; }
-			msg->kinematic_status = ks;
-			last_kinematic_status = ks;
+			if(sensor_read>=(uint16_t)(65536*0.0) && sensor_read<(uint16_t)(65536*0.3))	{last_kinematic_status = STANDING;}
+			if(sensor_read>=(uint16_t)(65536*0.3) && sensor_read<(uint16_t)(65536*0.6))	{last_kinematic_status = WALKING; }
+			if(sensor_read>=(uint16_t)(65536*0.6) && sensor_read<(uint16_t)(65536*0.9))	{last_kinematic_status = RUNNING; }
+			if(sensor_read>=(uint16_t)(65536*0.9) && sensor_read<(uint16_t)(65536*1.0))	{last_kinematic_status = FALLING; }
+			msg->kinematic_status = last_kinematic_status;
 
 			sensor_read=0;
 		}
@@ -203,11 +201,11 @@ implementation {
 	
 	void send_broadcast_key(){
 	
-		pairing_msg_t* msg=fill_pairing_msg();
+		my_msg_t* msg=fill_pairing_msg();
 		
 		if (msg != NULL) {
 			
-			if (call AMSend.send(AM_BROADCAST_ADDR, &packet, sizeof(pairing_msg_t)) == SUCCESS) {
+			if (call AMSend.send(AM_BROADCAST_ADDR, &packet, sizeof(my_msg_t)) == SUCCESS) {
 				
 				dbg("radio_send", "mote%u is broadcasting the PAIRINIG message\n", TOS_NODE_ID);
 				dbg_clear("radio_send", " at time %s \n", sim_time_string());	
@@ -238,7 +236,7 @@ implementation {
 		}
 	}
 	
-	void send_info_message(isResend){
+	void send_info_message(bool isResend){
 		
 		my_msg_t* msg=fill_info_msg(isResend);
 		
