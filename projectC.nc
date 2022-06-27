@@ -346,59 +346,60 @@ implementation {
 	
 
   //********************* AMSend interface ****************//
-  event void AMSend.sendDone(message_t* buf, error_t err) {
+  	event void AMSend.sendDone(message_t* buf, error_t err) {
 	/* This event is triggered when a message is sent */
 	
-	// 1. Check if the packet is sent
-	if (err != SUCCESS){
-	    dbgerror("radio_send", "Packet sending from mote%u failed to be sent\n", TOS_NODE_ID);
-		return;	
-	}
-	else {
-		dbg("radio_send", "Packet sending from mote%u sent correctly\n", TOS_NODE_ID);
-		
-		locked = FALSE;
-		dbg("radio_status", "radio on mote%u has been unlocked\n",TOS_NODE_ID);
-
-
-		//open-close section just because tinyos doesn't like the debug otherwise
-		{
-		
-		//parse the message
-		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(buf, sizeof(my_msg_t));
-		if (msg == NULL){
-			dbgerror("message", "failed to parse the sent message in sendDone\n");
-			return;
+		// 1. Check if the packet is sent
+		if (err != SUCCESS){
+			dbgerror("radio_send", "Packet sending from mote%u failed to be sent\n", TOS_NODE_ID);
+			return;	
 		}
+		else {
+			dbg("radio_send", "Packet sending from mote%u sent correctly\n", TOS_NODE_ID);
+			
+			locked = FALSE;
+			dbg("radio_status", "radio on mote%u has been unlocked\n",TOS_NODE_ID);
 
-		//deal with acks
-		if (!call PacketAcknowledgements.wasAcked(buf)){
+
+			//open-close section just because tinyos doesn't like the debug otherwise
+			{
 			
-			if(msg->msg_type == PAIRING_RESP){ 
-				send_pairing_resp();
-				dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%u, resending...\n",TOS_NODE_ID);
+			//parse the message
+			my_msg_t* msg = (my_msg_t*)call Packet.getPayload(buf, sizeof(my_msg_t));
+			if (msg == NULL){
+				dbgerror("message", "failed to parse the sent message in sendDone\n");
+				return;
 			}
-			if(msg->msg_type == INFO){
-				send_info_message(TRUE); 
-				dbg("info_ack","INFO ACK not received by mote%u, resending...\n",TOS_NODE_ID);
-			}
-		}
-		else{
-			
-			if(msg->msg_type == PAIRING_RESP){
-				dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%u\n",TOS_NODE_ID);
-				if(mote_type == CHILDREN){
-					call Info_Timer.startPeriodic(info_Tms);
-					dbg("info_timer","starting INFO timer on mote%u\n",TOS_NODE_ID);	
+
+			//deal with acks
+			if (!call PacketAcknowledgements.wasAcked(buf)){
+				
+				if(msg->msg_type == PAIRING_RESP){ 
+					send_pairing_resp();
+					dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%u, resending...\n",TOS_NODE_ID);
+				}
+				if(msg->msg_type == INFO){
+					send_info_message(TRUE); 
+					dbg("info_ack","INFO ACK not received by mote%u, resending...\n",TOS_NODE_ID);
 				}
 			}
-			if (msg->msg_type == INFO){
-				dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
+			else{
+				
+				if(msg->msg_type == PAIRING_RESP){
+					dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%u\n",TOS_NODE_ID);
+					if(mote_type == CHILDREN){
+						call Info_Timer.startPeriodic(info_Tms);
+						dbg("info_timer","starting INFO timer on mote%u\n",TOS_NODE_ID);	
+					}
+				}
+				if (msg->msg_type == INFO){
+					dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
+				}
 			}
 		}
-	}
-
-  }
+		}
+		return;
+	}	
 
   //***************************** Receive interface *****************//
   	
