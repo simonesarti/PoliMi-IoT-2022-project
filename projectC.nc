@@ -33,6 +33,7 @@ implementation {
   	bool locked = FALSE;
   	bool paired = FALSE;
   	uint8_t paired_with = 255;
+  	uint8_t received_from = 255;
 	char key[21];	//last for \0 character
   	mote_type_t mote_type;
   	kinematic_status_t kinematic_status;
@@ -220,9 +221,9 @@ implementation {
 		
 		if (msg != NULL) {
 			
-			if (call AMSend.send(paired_with, &packet, sizeof(my_msg_t)) == SUCCESS) {
+			if (call AMSend.send(received_from, &packet, sizeof(my_msg_t)) == SUCCESS) {
 				
-				dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,paired_with, sim_time_string());
+				dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,received_from, sim_time_string());
 				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
 				locked = TRUE;
 				
@@ -433,12 +434,10 @@ implementation {
 			//get the payload
 			my_msg_t* rec_msg = (my_msg_t*)payload;
 			
-			dbg("message", "mote%hhu received from mote%hhu\n", TOS_NODE_ID, rec_msg -> senderID);
 			if(rec_msg->msg_type == PAIRING){
-			
 				if (strcmp(key, rec_msg->key) == 0){
-					paired_with = rec_msg->senderID;
-					dbg("message", "mote%hhu received PAIRING MESSAGE from mote%hhu with same key, sending PAIRING RESP\n",TOS_NODE_ID, paired_with);
+					received_from = rec_msg->senderID;
+					dbg("message", "mote%hhu received PAIRING MESSAGE from mote%hhu with same key, sending PAIRING RESP\n",TOS_NODE_ID, received_from);
 					send_pairing_resp();
 					
 					
@@ -447,6 +446,7 @@ implementation {
 			}
 
 			if(rec_msg->msg_type == PAIRING_RESP){
+				paired_with = rec_msg->senderID;
 				paired=TRUE;
 				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Pairing with it\n",TOS_NODE_ID, paired_with);
 				dbg("pairing_timer","stopping PAIRING timer on mote%hhu\n",TOS_NODE_ID);
