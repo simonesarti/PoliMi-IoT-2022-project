@@ -29,10 +29,10 @@ module projectC {
 implementation {
 
   	message_t packet;
-  	bool locked;
-  	bool paired;
-  	uint8_t paired_with;
-	uint8_t received_from;
+	uint8_t retransmittion_counter=0;
+  	bool locked = FALSE;
+  	bool paired = FALSE;
+  	uint8_t paired_with = 255;
 	char key[21];	//last for \0 character
   	mote_type_t mote_type;
   	kinematic_status_t kinematic_status;
@@ -92,7 +92,6 @@ implementation {
 	void set_initial_parameters(){
 		
 		locked=FALSE;
-		paired=FALSE;
 		set_mote_type();
 		set_default_string();
 		
@@ -136,7 +135,7 @@ implementation {
 		//fill fields
 		msg->msg_type = PAIRING_RESP;
 		msg->senderID = TOS_NODE_ID;
-		strcpy(msg->key, "xxxxxxxxxxxxxxxxxxxx");
+		strcpy(msg->key, key);
 		msg->x = 0;
 		msg->y = 0;
 		msg->kinematic_status = NONE;
@@ -163,7 +162,7 @@ implementation {
 		//fill fields
 		msg->msg_type = INFO;
 		msg->senderID = TOS_NODE_ID;
-		strcpy(msg->key, "xxxxxxxxxxxxxxxxxxxx");
+		strcpy(msg->key, key);
 
 		if(!isResend){
 			
@@ -221,9 +220,9 @@ implementation {
 		
 		if (msg != NULL) {
 			
-			if (call AMSend.send(received_from, &packet, sizeof(my_msg_t)) == SUCCESS) {
+			if (call AMSend.send(paired_with, &packet, sizeof(my_msg_t)) == SUCCESS) {
 				
-				dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,received_from, sim_time_string());
+				dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,paired_with, sim_time_string());
 				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
 				locked = TRUE;
 				
@@ -390,15 +389,16 @@ implementation {
 					send_pairing_resp();
 					
 				}
-				if(msg->msg_type == INFO){
+				if(msg->msg_type == INFO && retransmittion_counter<2){
 					dbg("info_ack","INFO ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
-					send_info_message(TRUE); 
-					
+					send_info_message(TRUE);
+					retransmittion_counter++;
 				}
+				
 			}
 			else{
 				
-				if(msg->msg_type == PAIRING_RESP){
+				if(msg->msg_type == PAIRING_RESP && paired){
 					dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%hhu\n",TOS_NODE_ID);
 					if(mote_type == CHILD){
 						dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
@@ -408,7 +408,9 @@ implementation {
 				}
 				if (msg->msg_type == INFO){
 					dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
+					retransmittion_counter=0;
 				}
+				
 			}
 		}
 		}
@@ -435,8 +437,8 @@ implementation {
 			if(rec_msg->msg_type == PAIRING){
 			
 				if (strcmp(key, rec_msg->key) == 0){
-					received_from = rec_msg->senderID;
-					dbg("message", "mote%hhu received PAIRING MESSAGE from mote%hhu with same key, sending PAIRING RESP\n",TOS_NODE_ID, received_from);
+					paired_with = rec_msg->senderID;
+					dbg("message", "mote%hhu received PAIRING MESSAGE from mote%hhu with same key, sending PAIRING RESP\n",TOS_NODE_ID, paired_with);
 					send_pairing_resp();
 					
 					
@@ -445,11 +447,8 @@ implementation {
 			}
 
 			if(rec_msg->msg_type == PAIRING_RESP){
-				
-				paired_with = rec_msg->senderID;
-				paired = TRUE;
-				
-				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Paired with it\n",TOS_NODE_ID,paired_with);
+				paired=TRUE;
+				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Pairing with it\n",TOS_NODE_ID, paired_with);
 				dbg("pairing_timer","stopping PAIRING timer on mote%hhu\n",TOS_NODE_ID);
 				call Pairing_Timer.stop();
 				
@@ -459,7 +458,7 @@ implementation {
 				
 				if(rec_msg->senderID == paired_with){
 					
-					dbg("info_message", "mote%hhu received INFO from PAIRED mote%hhu\n",TOS_NODE_ID, paired_with);
+					dbg("info_message", "mote%hhu received INFO from paired mote%hhu\n",TOS_NODE_ID, paired_with);
 					last_x = rec_msg->x;
 					last_y = rec_msg->y; 
 					
