@@ -141,8 +141,8 @@ implementation {
 		msg->y = 0;
 		msg->kinematic_status = NONE;
 		
-		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s \n",
-		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status));
+		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s, type:%s \n",
+		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status),string_msg_type(msg->msg_type));
 
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
@@ -383,9 +383,15 @@ implementation {
 			}
 
 			//deal with acks
+			//dbgerror("message", "mote%hhu WAS ACKED: %u, type:%s\n",TOS_NODE_ID, call PacketAcknowledgements.wasAcked(buf),string_msg_type(msg->msg_type));
 			if (!call PacketAcknowledgements.wasAcked(buf)){
 				
-				if(msg->msg_type == PAIRING_RESP){ 
+				//if(msg->msg_type == PAIRING){
+				//	dbgerror("message","senderID:%hhu,key:%s,type:%s,x:%u",msg->senderID,msg->key,string_msg_type(msg->msg_type),msg->x);
+				//}
+				
+				if(msg->msg_type == PAIRING_RESP){
+					dbgerror("message", "mote%hhu WAS NOT ACKED in PAIRING RESPONSE: %u\n",TOS_NODE_ID);
 					dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
 					send_pairing_resp();
 					
