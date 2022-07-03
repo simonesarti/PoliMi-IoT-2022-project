@@ -898,7 +898,7 @@ extern void *malloc(size_t __size) __attribute((__leaf__)) __attribute((__nothro
 #line 483
 extern void free(void *__ptr) __attribute((__leaf__)) __attribute((__nothrow__)) ;
 #line 741
-typedef int (*__compar_fn_t)(const void *arg_0xb7bd1458, const void *arg_0xb7bd15f0);
+typedef int (*__compar_fn_t)(const void *arg_0xb7bd2458, const void *arg_0xb7bd25f0);
 #line 779
 __extension__ 
 #line 796
@@ -917,7 +917,7 @@ extern double sqrt(double __x) __attribute((__leaf__)) __attribute((__nothrow__)
 #line 184
 extern double floor(double __x) __attribute((__leaf__)) __attribute((__nothrow__)) __attribute((const)) ;
 #line 260
-extern double erfc(double arg_0xb7b828c8) __attribute((__leaf__)) __attribute((__nothrow__)) ;
+extern double erfc(double arg_0xb7b838c8) __attribute((__leaf__)) __attribute((__nothrow__)) ;
 #line 336
 __extension__ 
 
@@ -1312,8 +1312,8 @@ typedef struct hashtable hashtable_t;
 #line 78
 struct hashtable *
 create_hashtable(unsigned int minsize, 
-unsigned int (*hashfunction)(void *arg_0xb7a2c840), 
-int (*key_eq_fn)(void *arg_0xb7a2cc88, void *arg_0xb7a2ce00));
+unsigned int (*hashfunction)(void *arg_0xb7a2d840), 
+int (*key_eq_fn)(void *arg_0xb7a2dc88, void *arg_0xb7a2de00));
 #line 103
 #line 102
 int 
@@ -1926,7 +1926,7 @@ struct tm;
 
 struct tm;
 # 46 "/opt/tinyos-main-2.1.2/tos/lib/tossim/randomlib.h"
-static inline void RandomInitialise(int arg_0xb78fb9b8, int arg_0xb78fbb10);
+static inline void RandomInitialise(int arg_0xb78fc9b8, int arg_0xb78fcb10);
 static double RandomUniform(void );
 # 51 "/opt/tinyos-main-2.1.2/tos/lib/tossim/sim_noise.c"
 int numCase1 = 0;
@@ -2289,8 +2289,8 @@ typedef enum __nesc_unnamed4281 {
 
 #line 8
 typedef enum __nesc_unnamed4282 {
-  CHILD = 0, 
-  PARENT = 1
+  PARENT = 0, 
+  CHILD = 1
 } mote_type_t;
 
 
@@ -3812,11 +3812,11 @@ static error_t MeasureClockC$Init$init(void );
 # 67 "/opt/tinyos-main-2.1.2/tos/interfaces/TaskBasic.nc"
 static error_t SimSchedulerBasicP$TaskBasic$postTask(
 # 49 "/opt/tinyos-main-2.1.2/tos/lib/tossim/SimSchedulerBasicP.nc"
-uint8_t arg_0xb7857650);
+uint8_t arg_0xb7858650);
 # 75 "/opt/tinyos-main-2.1.2/tos/interfaces/TaskBasic.nc"
 static void SimSchedulerBasicP$TaskBasic$default$runTask(
 # 49 "/opt/tinyos-main-2.1.2/tos/lib/tossim/SimSchedulerBasicP.nc"
-uint8_t arg_0xb7857650);
+uint8_t arg_0xb7858650);
 # 57 "/opt/tinyos-main-2.1.2/tos/interfaces/Scheduler.nc"
 static void SimSchedulerBasicP$Scheduler$init(void );
 
@@ -3846,7 +3846,7 @@ static long long int SimMoteP$SimMote$getStartTime(void );
 # 80 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 static error_t TossimActiveMessageC$AMSend$send(
 # 47 "/opt/tinyos-main-2.1.2/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0xb769b108, 
+am_id_t arg_0xb769c108, 
 # 80 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 am_addr_t addr, 
 #line 71
@@ -3869,7 +3869,7 @@ message_t *
 
 TossimActiveMessageC$Snoop$default$receive(
 # 49 "/opt/tinyos-main-2.1.2/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0xb7698178, 
+am_id_t arg_0xb7699178, 
 # 71 "/opt/tinyos-main-2.1.2/tos/interfaces/Receive.nc"
 message_t * msg, 
 void * payload, 
@@ -3916,7 +3916,7 @@ message_t *
 
 TossimActiveMessageC$Receive$default$receive(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0xb769bac8, 
+am_id_t arg_0xb769cac8, 
 # 71 "/opt/tinyos-main-2.1.2/tos/interfaces/Receive.nc"
 message_t * msg, 
 void * payload, 
@@ -4086,7 +4086,7 @@ error_t error);
 # 110 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$AMSend$sendDone(
 # 48 "/opt/tinyos-main-2.1.2/tos/system/AMQueueImplP.nc"
-am_id_t arg_0xb74f1498, 
+am_id_t arg_0xb74f09f8, 
 # 103 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 message_t * msg, 
 
@@ -4099,7 +4099,7 @@ error_t error);
 # 75 "/opt/tinyos-main-2.1.2/tos/interfaces/Send.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$send(
 # 46 "/opt/tinyos-main-2.1.2/tos/system/AMQueueImplP.nc"
-uint8_t arg_0xb74f4a98, 
+uint8_t arg_0xb74f0010, 
 # 67 "/opt/tinyos-main-2.1.2/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -4113,7 +4113,7 @@ uint8_t len);
 #line 100
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$default$sendDone(
 # 46 "/opt/tinyos-main-2.1.2/tos/system/AMQueueImplP.nc"
-uint8_t arg_0xb74f4a98, 
+uint8_t arg_0xb74f0010, 
 # 96 "/opt/tinyos-main-2.1.2/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -4190,11 +4190,11 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$fire
 #line 83
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0xb73713a8);
+uint8_t arg_0xb7372c70);
 # 64 "/opt/tinyos-main-2.1.2/tos/lib/timer/Timer.nc"
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startPeriodic(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0xb73713a8, 
+uint8_t arg_0xb7372c70, 
 # 64 "/opt/tinyos-main-2.1.2/tos/lib/timer/Timer.nc"
 uint32_t dt);
 
@@ -4207,7 +4207,7 @@ uint32_t dt);
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$startOneShot(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0xb73713a8, 
+uint8_t arg_0xb7372c70, 
 # 73 "/opt/tinyos-main-2.1.2/tos/lib/timer/Timer.nc"
 uint32_t dt);
 
@@ -4216,7 +4216,7 @@ uint32_t dt);
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$stop(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0xb73713a8);
+uint8_t arg_0xb7372c70);
 # 82 "/opt/tinyos-main-2.1.2/tos/lib/timer/Counter.nc"
 static void /*HilTimerMilliC.CounterToLocalTimeC*/CounterToLocalTimeC$0$Counter$overflow(void );
 # 52 "/opt/tinyos-main-2.1.2/tos/interfaces/Random.nc"
@@ -4273,7 +4273,7 @@ int sim_main_start_mote(void )   ;
 # 75 "/opt/tinyos-main-2.1.2/tos/interfaces/TaskBasic.nc"
 static void SimSchedulerBasicP$TaskBasic$runTask(
 # 49 "/opt/tinyos-main-2.1.2/tos/lib/tossim/SimSchedulerBasicP.nc"
-uint8_t arg_0xb7857650);
+uint8_t arg_0xb7858650);
 
 
 
@@ -4441,7 +4441,7 @@ static am_addr_t TossimActiveMessageC$amAddress(void );
 # 110 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 static void TossimActiveMessageC$AMSend$sendDone(
 # 47 "/opt/tinyos-main-2.1.2/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0xb769b108, 
+am_id_t arg_0xb769c108, 
 # 103 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 message_t * msg, 
 
@@ -4460,7 +4460,7 @@ message_t *
 
 TossimActiveMessageC$Snoop$receive(
 # 49 "/opt/tinyos-main-2.1.2/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0xb7698178, 
+am_id_t arg_0xb7699178, 
 # 71 "/opt/tinyos-main-2.1.2/tos/interfaces/Receive.nc"
 message_t * msg, 
 void * payload, 
@@ -4479,7 +4479,7 @@ message_t *
 
 TossimActiveMessageC$Receive$receive(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/tossim/TossimActiveMessageC.nc"
-am_id_t arg_0xb769bac8, 
+am_id_t arg_0xb769cac8, 
 # 71 "/opt/tinyos-main-2.1.2/tos/interfaces/Receive.nc"
 message_t * msg, 
 void * payload, 
@@ -4898,6 +4898,7 @@ message_t projectC$packet[1000];
 uint8_t projectC$retransmittion_counter[1000];
 bool projectC$locked[1000];
 bool projectC$paired[1000];
+bool projectC$other_paired[1000];
 uint8_t projectC$paired_with[1000];
 uint8_t projectC$received_from[1000];
 char projectC$key[1000][21];
@@ -4932,6 +4933,8 @@ static inline const char *projectC$string_mote_type(mote_type_t mote_type);
 
 static const char *projectC$string_ks(kinematic_status_t ks);
 
+static void projectC$try_info_phase(void );
+
 
 
 static inline void projectC$set_mote_type(void );
@@ -4960,11 +4963,11 @@ static inline void projectC$set_initial_parameters(void );
 
 
 static inline void projectC$send_broadcast_key(void );
-#line 126
+#line 129
 static void projectC$send_pairing_resp(void );
-#line 161
+#line 164
 static void projectC$send_info_message(bool isResend);
-#line 216
+#line 219
 static inline const char *projectC$string_mote_type(mote_type_t mote_type);
 
 
@@ -4977,7 +4980,15 @@ static inline const char *projectC$string_mote_type(mote_type_t mote_type);
 
 
 static const char *projectC$string_ks(kinematic_status_t ks);
-#line 239
+
+
+
+
+
+
+
+static void projectC$try_info_phase(void );
+#line 250
 static inline void projectC$Boot$booted(void );
 
 
@@ -4988,7 +4999,7 @@ static inline void projectC$Boot$booted(void );
 
 
 static inline void projectC$SplitControl$startDone(error_t err);
-#line 266
+#line 277
 static inline void projectC$SplitControl$stopDone(error_t err);
 
 
@@ -4997,9 +5008,9 @@ static inline void projectC$SplitControl$stopDone(error_t err);
 
 
 static inline void projectC$Pairing_Timer$fired(void );
-#line 287
+#line 298
 static inline void projectC$Info_Timer$fired(void );
-#line 301
+#line 312
 static inline void projectC$OutOfRange_Timer$fired(void );
 
 
@@ -5012,9 +5023,9 @@ static inline void projectC$OutOfRange_Timer$fired(void );
 
 
 static void projectC$AMSend$sendDone(message_t *buf, error_t err);
-#line 377
+#line 385
 static inline message_t *projectC$Receive$receive(message_t *buf, void *payload, uint8_t len);
-#line 439
+#line 448
 static inline void projectC$FakeSensor$readDone(error_t result, info_data_t data);
 # 110 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 static void /*projectAppC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueEntryP$0$AMSend$sendDone(
@@ -5072,7 +5083,7 @@ static inline void /*projectAppC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueEntryP$
 # 80 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$AMSend$send(
 # 48 "/opt/tinyos-main-2.1.2/tos/system/AMQueueImplP.nc"
-am_id_t arg_0xb74f1498, 
+am_id_t arg_0xb74f09f8, 
 # 80 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
 am_addr_t addr, 
 #line 71
@@ -5089,7 +5100,7 @@ uint8_t len);
 # 100 "/opt/tinyos-main-2.1.2/tos/interfaces/Send.nc"
 static void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$sendDone(
 # 46 "/opt/tinyos-main-2.1.2/tos/system/AMQueueImplP.nc"
-uint8_t arg_0xb74f4a98, 
+uint8_t arg_0xb74f0010, 
 # 96 "/opt/tinyos-main-2.1.2/tos/interfaces/Send.nc"
 message_t * msg, 
 
@@ -5489,7 +5500,7 @@ static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$TimerFrom$stop
 
 static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$fired(
 # 48 "/opt/tinyos-main-2.1.2/tos/lib/timer/VirtualizeTimerC.nc"
-uint8_t arg_0xb73713a8);
+uint8_t arg_0xb7372c70);
 #line 71
 enum /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$__nesc_unnamed4341 {
 #line 71
@@ -6039,9 +6050,9 @@ inline static void projectC$Pairing_Timer$stop(void ){
 #line 78
 }
 #line 78
-# 377 "projectC.nc"
+# 385 "projectC.nc"
 static inline message_t *projectC$Receive$receive(message_t *buf, void *payload, uint8_t len)
-#line 377
+#line 385
 {
 
 
@@ -6072,6 +6083,7 @@ static inline message_t *projectC$Receive$receive(message_t *buf, void *payload,
           sim_log_debug(188U, "message", "mote%hhu received PAIRING RESP from mote%hhu. Pairing with it\n", TOS_NODE_ID, projectC$paired_with[sim_node()]);
           sim_log_debug(189U, "pairing_timer", "stopping PAIRING timer on mote%hhu\n", TOS_NODE_ID);
           projectC$Pairing_Timer$stop();
+          projectC$try_info_phase();
         }
 
 
@@ -6084,7 +6096,7 @@ static inline message_t *projectC$Receive$receive(message_t *buf, void *payload,
               projectC$last_y[sim_node()] = __nesc_ntoh_uint16(rec_msg->y.nxdata);
 
               if (__nesc_ntoh_uint8(rec_msg->kinematic_status.nxdata) == FALLING) {
-                  sim_log_debug(191U, "falling_alarm", " FALLING ALERT: Child has fallen, go pick him up at position (x:%hhu, y:%u)\n", TOS_NODE_ID, projectC$last_x[sim_node()], projectC$last_y[sim_node()]);
+                  sim_log_debug(191U, "falling_alarm", "FALLING ALERT: Child has fallen, go pick him up at position (x:%u, y:%u)\n", projectC$last_x[sim_node()], projectC$last_y[sim_node()]);
                 }
               sim_log_debug(192U, "oor_timer", "mote%hhu started OutOfRange TIMER countdown\n", TOS_NODE_ID);
               projectC$OutOfRange_Timer$startOneShot(projectC$outofrange_Tms[sim_node()]);
@@ -6107,13 +6119,13 @@ static inline message_t *TossimActiveMessageC$Receive$default$receive(am_id_t id
 }
 
 # 78 "/opt/tinyos-main-2.1.2/tos/interfaces/Receive.nc"
-inline static message_t * TossimActiveMessageC$Receive$receive(am_id_t arg_0xb769bac8, message_t * msg, void * payload, uint8_t len){
+inline static message_t * TossimActiveMessageC$Receive$receive(am_id_t arg_0xb769cac8, message_t * msg, void * payload, uint8_t len){
 #line 78
   nx_struct message_t *__nesc_result;
 #line 78
 
 #line 78
-  switch (arg_0xb769bac8) {
+  switch (arg_0xb769cac8) {
 #line 78
     case 6:
 #line 78
@@ -6123,7 +6135,7 @@ inline static message_t * TossimActiveMessageC$Receive$receive(am_id_t arg_0xb76
 #line 78
     default:
 #line 78
-      __nesc_result = TossimActiveMessageC$Receive$default$receive(arg_0xb769bac8, msg, payload, len);
+      __nesc_result = TossimActiveMessageC$Receive$default$receive(arg_0xb769cac8, msg, payload, len);
 #line 78
       break;
 #line 78
@@ -6233,13 +6245,13 @@ inline static void /*projectAppC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueEntryP$
 }
 #line 162
 # 80 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
-inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$AMSend$send(am_id_t arg_0xb74f1498, am_addr_t addr, message_t * msg, uint8_t len){
+inline static error_t /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$AMSend$send(am_id_t arg_0xb74f09f8, am_addr_t addr, message_t * msg, uint8_t len){
 #line 80
   unsigned char __nesc_result;
 #line 80
 
 #line 80
-  __nesc_result = TossimActiveMessageC$AMSend$send(arg_0xb74f1498, addr, msg, len);
+  __nesc_result = TossimActiveMessageC$AMSend$send(arg_0xb74f09f8, addr, msg, len);
 #line 80
 
 #line 80
@@ -6346,9 +6358,9 @@ inline static error_t /*projectAppC.AMSenderC.SenderC.AMQueueEntryP*/AMQueueEntr
 }
 #line 75
 # 110 "/opt/tinyos-main-2.1.2/tos/interfaces/AMSend.nc"
-inline static void TossimActiveMessageC$AMSend$sendDone(am_id_t arg_0xb769b108, message_t * msg, error_t error){
+inline static void TossimActiveMessageC$AMSend$sendDone(am_id_t arg_0xb769c108, message_t * msg, error_t error){
 #line 110
-  /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$AMSend$sendDone(arg_0xb769b108, msg, error);
+  /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$AMSend$sendDone(arg_0xb769c108, msg, error);
 #line 110
 }
 #line 110
@@ -7276,13 +7288,13 @@ static inline message_t *TossimActiveMessageC$Snoop$default$receive(am_id_t id, 
 }
 
 # 78 "/opt/tinyos-main-2.1.2/tos/interfaces/Receive.nc"
-inline static message_t * TossimActiveMessageC$Snoop$receive(am_id_t arg_0xb7698178, message_t * msg, void * payload, uint8_t len){
+inline static message_t * TossimActiveMessageC$Snoop$receive(am_id_t arg_0xb7699178, message_t * msg, void * payload, uint8_t len){
 #line 78
   nx_struct message_t *__nesc_result;
 #line 78
 
 #line 78
-    __nesc_result = TossimActiveMessageC$Snoop$default$receive(arg_0xb7698178, msg, payload, len);
+    __nesc_result = TossimActiveMessageC$Snoop$default$receive(arg_0xb7699178, msg, payload, len);
 #line 78
 
 #line 78
@@ -7419,22 +7431,22 @@ inline static void projectC$Pairing_Timer$startPeriodic(uint32_t dt){
 #line 64
 }
 #line 64
-# 248 "projectC.nc"
+# 259 "projectC.nc"
 static inline void projectC$SplitControl$startDone(error_t err)
-#line 248
+#line 259
 {
 
   if (err == SUCCESS) {
 
-      sim_log_debug(165U, "radio_status", "Radio ON on mote%hhu!\n", TOS_NODE_ID);
+      sim_log_debug(166U, "radio_status", "Radio ON on mote%hhu!\n", TOS_NODE_ID);
 
-      sim_log_debug(166U, "pairing_timer", "Started PAIRING TIMER on mote%hhu\n", TOS_NODE_ID);
+      sim_log_debug(167U, "pairing_timer", "Started PAIRING TIMER on mote%hhu\n", TOS_NODE_ID);
       projectC$Pairing_Timer$startPeriodic(projectC$pairing_Tms[sim_node()]);
     }
   else 
     {
 
-      sim_log_error(167U, "radio_status", "Radio failed to start on node %hhu, retrying...\n", TOS_NODE_ID);
+      sim_log_error(168U, "radio_status", "Radio failed to start on node %hhu, retrying...\n", TOS_NODE_ID);
       projectC$SplitControl$start();
     }
 }
@@ -7454,11 +7466,11 @@ static inline void TossimPacketModelC$startDoneTask$runTask(void )
   TossimPacketModelC$Control$startDone(SUCCESS);
 }
 
-# 266 "projectC.nc"
+# 277 "projectC.nc"
 static inline void projectC$SplitControl$stopDone(error_t err)
-#line 266
+#line 277
 {
-  sim_log_debug(168U, "radio_status", "Radio on mote%hhu stopped!\n", TOS_NODE_ID);
+  sim_log_debug(169U, "radio_status", "Radio on mote%hhu stopped!\n", TOS_NODE_ID);
 }
 
 # 138 "/opt/tinyos-main-2.1.2/tos/interfaces/SplitControl.nc"
@@ -7512,9 +7524,9 @@ static inline void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$default$sendDone
 }
 
 # 100 "/opt/tinyos-main-2.1.2/tos/interfaces/Send.nc"
-inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$sendDone(uint8_t arg_0xb74f4a98, message_t * msg, error_t error){
+inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$sendDone(uint8_t arg_0xb74f0010, message_t * msg, error_t error){
 #line 100
-  switch (arg_0xb74f4a98) {
+  switch (arg_0xb74f0010) {
 #line 100
     case 0U:
 #line 100
@@ -7524,7 +7536,7 @@ inline static void /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$sendDone(uint8_t
 #line 100
     default:
 #line 100
-      /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$default$sendDone(arg_0xb74f4a98, msg, error);
+      /*AMQueueP.AMQueueImplP*/AMQueueImplP$0$Send$default$sendDone(arg_0xb74f0010, msg, error);
 #line 100
       break;
 #line 100
@@ -7755,9 +7767,9 @@ static inline void SimSchedulerBasicP$TaskBasic$default$runTask(uint8_t id)
 }
 
 # 75 "/opt/tinyos-main-2.1.2/tos/interfaces/TaskBasic.nc"
-inline static void SimSchedulerBasicP$TaskBasic$runTask(uint8_t arg_0xb7857650){
+inline static void SimSchedulerBasicP$TaskBasic$runTask(uint8_t arg_0xb7858650){
 #line 75
-  switch (arg_0xb7857650) {
+  switch (arg_0xb7858650) {
 #line 75
     case TossimPacketModelC$startDoneTask:
 #line 75
@@ -7803,7 +7815,7 @@ inline static void SimSchedulerBasicP$TaskBasic$runTask(uint8_t arg_0xb7857650){
 #line 75
     default:
 #line 75
-      SimSchedulerBasicP$TaskBasic$default$runTask(arg_0xb7857650);
+      SimSchedulerBasicP$TaskBasic$default$runTask(arg_0xb7858650);
 #line 75
       break;
 #line 75
@@ -7853,9 +7865,9 @@ inline static void * projectC$Packet$getPayload(message_t * msg, uint8_t len){
 #line 126
 }
 #line 126
-# 96 "projectC.nc"
+# 99 "projectC.nc"
 static inline void projectC$send_broadcast_key(void )
-#line 96
+#line 99
 {
 
   my_msg_t *bk_msg = (my_msg_t *)projectC$Packet$getPayload(&projectC$packet[sim_node()], sizeof(my_msg_t ));
@@ -7885,51 +7897,51 @@ static inline void projectC$send_broadcast_key(void )
     }
 }
 
-#line 273
+#line 284
 static inline void projectC$Pairing_Timer$fired(void )
-#line 273
+#line 284
 {
 
-  sim_log_debug(169U, "pairing_timer", "pairing Timer on mote%hhu fired\n", TOS_NODE_ID);
+  sim_log_debug(170U, "pairing_timer", "pairing Timer on mote%hhu fired\n", TOS_NODE_ID);
 
   if (projectC$locked[sim_node()]) {
-      sim_log_debug(170U, "radio_send", "Radio on mote%hhu was locked when timer fired, do nothing\n", TOS_NODE_ID);
+      sim_log_debug(171U, "radio_send", "Radio on mote%hhu was locked when timer fired, do nothing\n", TOS_NODE_ID);
     }
   else {
-      sim_log_debug(171U, "radio_send", "Radio on mote%hhu not locked, sending the PAIRING message\n", TOS_NODE_ID);
+      sim_log_debug(172U, "radio_send", "Radio on mote%hhu not locked, sending the PAIRING message\n", TOS_NODE_ID);
       projectC$send_broadcast_key();
     }
 }
 
 
 static inline void projectC$Info_Timer$fired(void )
-#line 287
+#line 298
 {
 
-  sim_log_debug(172U, "info_timer", "info Timer on mote%hhu fired\n", TOS_NODE_ID);
+  sim_log_debug(173U, "info_timer", "info Timer on mote%hhu fired\n", TOS_NODE_ID);
 
   if (projectC$locked[sim_node()]) {
-      sim_log_debug(173U, "radio_send", "Radio on mote%hhu was locked when timer fired, do nothing\n", TOS_NODE_ID);
+      sim_log_debug(174U, "radio_send", "Radio on mote%hhu was locked when timer fired, do nothing\n", TOS_NODE_ID);
     }
   else {
-      sim_log_debug(174U, "radio_send", "Radio on mote%hhu not locked, sending the INFO message\n", TOS_NODE_ID);
+      sim_log_debug(175U, "radio_send", "Radio on mote%hhu not locked, sending the INFO message\n", TOS_NODE_ID);
       projectC$send_info_message(FALSE);
     }
 }
 
 
 static inline void projectC$OutOfRange_Timer$fired(void )
-#line 301
+#line 312
 {
 
-  sim_log_debug(175U, "oor_timer", "out_of_range Timer on mote%hhu fired\n", TOS_NODE_ID);
+  sim_log_debug(176U, "oor_timer", "out_of_range Timer on mote%hhu fired\n", TOS_NODE_ID);
 
-  sim_log_debug(176U, "missing_alarm", " MISSING ALERT: Mote%hhu has not received messages from child for more than 60s. Last known position was (x:%u, y:%u)\n", TOS_NODE_ID, projectC$last_x[sim_node()], projectC$last_y[sim_node()]);
+  sim_log_debug(177U, "missing_alarm", "MISSING ALERT: Mote%hhu has not received messages from child for more than 60s. Last known position was (x:%u, y:%u)\n", TOS_NODE_ID, projectC$last_x[sim_node()], projectC$last_y[sim_node()]);
 }
 
-#line 439
+#line 448
 static inline void projectC$FakeSensor$readDone(error_t result, info_data_t data)
-#line 439
+#line 448
 {
 
   projectC$sensor_read[sim_node()] = data;
@@ -7984,9 +7996,9 @@ static inline void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$d
 }
 
 # 83 "/opt/tinyos-main-2.1.2/tos/lib/timer/Timer.nc"
-inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$fired(uint8_t arg_0xb73713a8){
+inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$fired(uint8_t arg_0xb7372c70){
 #line 83
-  switch (arg_0xb73713a8) {
+  switch (arg_0xb7372c70) {
 #line 83
     case 0U:
 #line 83
@@ -8014,7 +8026,7 @@ inline static void /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$f
 #line 83
     default:
 #line 83
-      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(arg_0xb73713a8);
+      /*HilTimerMilliC.VirtualizeTimerC*/VirtualizeTimerC$0$Timer$default$fired(arg_0xb7372c70);
 #line 83
       break;
 #line 83
@@ -8641,50 +8653,50 @@ inline static error_t SimMainP$SoftwareInit$init(void ){
 #line 62
 }
 #line 62
-# 81 "projectC.nc"
+# 84 "projectC.nc"
 static inline void projectC$set_default_string(void )
-#line 81
+#line 84
 {
 
   if ((uint8_t )(TOS_NODE_ID / 2) == 0) {
-#line 83
+#line 86
       strcpy(projectC$key[sim_node()], projectC$string1[sim_node()]);
     }
-#line 84
+#line 87
   if ((uint8_t )(TOS_NODE_ID / 2) == 1) {
-#line 84
+#line 87
       strcpy(projectC$key[sim_node()], projectC$string2[sim_node()]);
     }
   sim_log_debug(149U, "setting", "Mote%hhu set key to %s\n", TOS_NODE_ID, projectC$key[sim_node()]);
 }
 
-#line 216
+#line 219
 static inline const char *projectC$string_mote_type(mote_type_t mote_type)
-#line 216
+#line 219
 {
   if (mote_type == PARENT) {
-#line 217
-      return "CHILD";
-    }
-#line 218
-  if (mote_type == CHILD) {
-#line 218
+#line 220
       return "PARENT";
+    }
+#line 221
+  if (mote_type == CHILD) {
+#line 221
+      return "CHILD";
     }
 }
 
-#line 71
+#line 74
 static inline void projectC$set_mote_type(void )
-#line 71
+#line 74
 {
 
   if (TOS_NODE_ID % 2 == 0) {
-      projectC$mote_type[sim_node()] = CHILD;
+      projectC$mote_type[sim_node()] = PARENT;
     }
   else 
-#line 75
+#line 78
     {
-      projectC$mote_type[sim_node()] = PARENT;
+      projectC$mote_type[sim_node()] = CHILD;
     }
   sim_log_debug(148U, "setting", "Mote%hhu set to type %s\n", TOS_NODE_ID, projectC$string_mote_type(projectC$mote_type[sim_node()]));
 }
@@ -8698,7 +8710,7 @@ static inline void projectC$set_mote_type(void )
 
 
 static inline void projectC$set_initial_parameters(void )
-#line 89
+#line 92
 {
 
   projectC$locked[sim_node()] = FALSE;
@@ -8706,12 +8718,12 @@ static inline void projectC$set_initial_parameters(void )
   projectC$set_default_string();
 }
 
-#line 239
+#line 250
 static inline void projectC$Boot$booted(void )
-#line 239
+#line 250
 {
 
-  sim_log_debug(164U, "boot", "Application booted on node %hhu.\n", TOS_NODE_ID);
+  sim_log_debug(165U, "boot", "Application booted on node %hhu.\n", TOS_NODE_ID);
   projectC$set_initial_parameters();
   projectC$SplitControl$start();
 }
@@ -10265,14 +10277,14 @@ static am_id_t TossimActiveMessageC$AMPacket$type(message_t *amsg)
   return __nesc_ntoh_uint8(header->type.nxdata);
 }
 
-# 126 "projectC.nc"
+# 129 "projectC.nc"
 static void projectC$send_pairing_resp(void )
-#line 126
+#line 129
 {
 
   my_msg_t *msg = (my_msg_t *)projectC$Packet$getPayload(&projectC$packet[sim_node()], sizeof(my_msg_t ));
 
-#line 129
+#line 132
   if (msg == (void *)0) {
       sim_log_error(154U, "pairing_resp_message", "failed to create the PAIRING RESPONSE message\n");
       return;
@@ -10302,32 +10314,32 @@ static void projectC$send_pairing_resp(void )
     }
 }
 
-#line 227
+#line 230
 static const char *projectC$string_ks(kinematic_status_t ks)
-#line 227
+#line 230
 {
   if (ks == NONE) {
-#line 228
+#line 231
       return "NONE";
     }
-#line 229
+#line 232
   if (ks == STANDING) {
-#line 229
+#line 232
       return "STANDING";
     }
-#line 230
+#line 233
   if (ks == WALKING) {
-#line 230
+#line 233
       return "WALKING";
     }
-#line 231
+#line 234
   if (ks == RUNNING) {
-#line 231
+#line 234
       return "RUNNING";
     }
-#line 232
+#line 235
   if (ks == FALLING) {
-#line 232
+#line 235
       return "FALLING";
     }
 }
@@ -10477,21 +10489,21 @@ static void SimSchedulerBasicP$sim_scheduler_submit_event(void )
     }
 }
 
-# 312 "projectC.nc"
+# 323 "projectC.nc"
 static void projectC$AMSend$sendDone(message_t *buf, error_t err)
-#line 312
+#line 323
 {
 
 
 
   if (err != SUCCESS) {
-      sim_log_error(177U, "radio_send", "Packet sending from mote%hhu failed to be sent\n", TOS_NODE_ID);
+      sim_log_error(178U, "radio_send", "Packet sending from mote%hhu failed to be sent\n", TOS_NODE_ID);
       return;
     }
   else {
-      sim_log_debug(178U, "radio_send", "Packet sending from mote%hhu sent correctly\n", TOS_NODE_ID);
+      sim_log_debug(179U, "radio_send", "Packet sending from mote%hhu sent correctly\n", TOS_NODE_ID);
 
-      sim_log_debug(179U, "radio_status", "radio on mote%hhu has been unlocked\n", TOS_NODE_ID);
+      sim_log_debug(180U, "radio_status", "radio on mote%hhu has been unlocked\n", TOS_NODE_ID);
       projectC$locked[sim_node()] = FALSE;
 
 
@@ -10502,9 +10514,9 @@ static void projectC$AMSend$sendDone(message_t *buf, error_t err)
 
         my_msg_t *msg = (my_msg_t *)projectC$Packet$getPayload(buf, sizeof(my_msg_t ));
 
-#line 333
+#line 344
         if (msg == (void *)0) {
-            sim_log_error(180U, "message", "failed to parse the sent message in sendDone\n");
+            sim_log_error(181U, "message", "failed to parse the sent message in sendDone\n");
             return;
           }
 
@@ -10512,12 +10524,12 @@ static void projectC$AMSend$sendDone(message_t *buf, error_t err)
         if (!projectC$PacketAcknowledgements$wasAcked(buf)) {
 
             if (__nesc_ntoh_uint8(msg->msg_type.nxdata) == PAIRING_RESP) {
-                sim_log_debug(181U, "pairing_resp_ack", "PAIRING RESP ACK not received by mote%hhu, resending...\n", TOS_NODE_ID);
+                sim_log_debug(182U, "pairing_resp_ack", "PAIRING RESP ACK not received by mote%hhu, resending...\n", TOS_NODE_ID);
                 projectC$send_pairing_resp();
               }
 
             if (__nesc_ntoh_uint8(msg->msg_type.nxdata) == INFO && projectC$retransmittion_counter[sim_node()] < 2) {
-                sim_log_debug(182U, "info_ack", "INFO ACK not received by mote%hhu, resending...\n", TOS_NODE_ID);
+                sim_log_debug(183U, "info_ack", "INFO ACK not received by mote%hhu, resending...\n", TOS_NODE_ID);
                 projectC$send_info_message(TRUE);
                 projectC$retransmittion_counter[sim_node()]++;
               }
@@ -10525,34 +10537,31 @@ static void projectC$AMSend$sendDone(message_t *buf, error_t err)
         else 
           {
 
-            if (__nesc_ntoh_uint8(msg->msg_type.nxdata) == PAIRING_RESP && projectC$paired[sim_node()]) {
-                sim_log_debug(183U, "pairing_resp_ack", "PAIRING RESP ACK received by mote%hhu\n", TOS_NODE_ID);
-                if (projectC$mote_type[sim_node()] == CHILD) {
-                    sim_log_debug(184U, "info_timer", "starting INFO timer on mote%hhu\n", TOS_NODE_ID);
-                    projectC$Info_Timer$startPeriodic(projectC$info_Tms[sim_node()]);
-                  }
+            if (__nesc_ntoh_uint8(msg->msg_type.nxdata) == PAIRING_RESP) {
+                sim_log_debug(184U, "pairing_resp_ack", "PAIRING RESP ACK received by mote%hhu\n", TOS_NODE_ID);
+                projectC$other_paired[sim_node()] = TRUE;
+                projectC$try_info_phase();
               }
-
             if (__nesc_ntoh_uint8(msg->msg_type.nxdata) == INFO) {
                 sim_log_debug(185U, "info_ack", "INFO ACK received by mote%u\n", TOS_NODE_ID);
+                projectC$retransmittion_counter[sim_node()] = 0;
               }
           }
       }
     }
 
-
   return;
 }
 
-#line 161
+#line 164
 static void projectC$send_info_message(bool isResend)
-#line 161
+#line 164
 {
 
 
   my_msg_t *msg = (my_msg_t *)projectC$Packet$getPayload(&projectC$packet[sim_node()], sizeof(my_msg_t ));
 
-#line 165
+#line 168
   if (msg == (void *)0) {
       sim_log_error(159U, "info_message", "failed to create the INFO message\n");
       return;
@@ -10575,25 +10584,25 @@ static void projectC$send_info_message(bool isResend)
 
 
       if (projectC$sensor_read[sim_node()].kinematic_status >= (uint16_t )(65536 * 0.0) && projectC$sensor_read[sim_node()].kinematic_status < (uint16_t )(65536 * 0.3)) {
-#line 186
+#line 189
           projectC$last_kinematic_status[sim_node()] = STANDING;
         }
-#line 187
+#line 190
       if (projectC$sensor_read[sim_node()].kinematic_status >= (uint16_t )(65536 * 0.3) && projectC$sensor_read[sim_node()].kinematic_status < (uint16_t )(65536 * 0.6)) {
-#line 187
+#line 190
           projectC$last_kinematic_status[sim_node()] = WALKING;
         }
-#line 188
+#line 191
       if (projectC$sensor_read[sim_node()].kinematic_status >= (uint16_t )(65536 * 0.6) && projectC$sensor_read[sim_node()].kinematic_status < (uint16_t )(65536 * 0.9)) {
-#line 188
+#line 191
           projectC$last_kinematic_status[sim_node()] = RUNNING;
         }
-#line 189
+#line 192
       if (projectC$sensor_read[sim_node()].kinematic_status >= (uint16_t )(65536 * 0.9) && projectC$sensor_read[sim_node()].kinematic_status < (uint16_t )(65536 * 1.0)) {
-#line 189
+#line 192
           projectC$last_kinematic_status[sim_node()] = FALLING;
         }
-#line 190
+#line 193
       __nesc_hton_uint8(msg->kinematic_status.nxdata, projectC$last_kinematic_status[sim_node()]);
     }
   else 
@@ -10752,6 +10761,17 @@ static uint8_t HplAtm128Timer0AsyncP$Compare$get(void )
 {
   sim_log_debug(218U, "HplAtm128Timer0AsyncP", "HplAtm128Timer0AsyncP: Getting compare: %hhu\n", * (volatile uint8_t *)&atm128RegFile[sim_node()][0x31]);
   return * (volatile uint8_t *)&atm128RegFile[sim_node()][0x31];
+}
+
+# 238 "projectC.nc"
+static void projectC$try_info_phase(void )
+#line 238
+{
+
+  if (projectC$paired[sim_node()] && projectC$other_paired[sim_node()] && projectC$mote_type[sim_node()] == CHILD) {
+      sim_log_debug(164U, "info_timer", "starting INFO timer on mote%hhu\n", TOS_NODE_ID);
+      projectC$Info_Timer$startPeriodic(projectC$info_Tms[sim_node()]);
+    }
 }
 
 # 154 "/opt/tinyos-main-2.1.2/tos/lib/timer/VirtualizeTimerC.nc"
@@ -11721,6 +11741,12 @@ static int __nesc_nido_resolve(int __nesc_mote,
     *size = sizeof(projectC$paired[__nesc_mote]);
     return 0;
   }
+  if (!strcmp(varname, "projectC$other_paired"))
+  {
+    *addr = (uintptr_t)&projectC$other_paired[__nesc_mote];
+    *size = sizeof(projectC$other_paired[__nesc_mote]);
+    return 0;
+  }
   if (!strcmp(varname, "projectC$paired_with"))
   {
     *addr = (uintptr_t)&projectC$paired_with[__nesc_mote];
@@ -12097,6 +12123,7 @@ static void __nesc_nido_initialise(int __nesc_mote)
   projectC$retransmittion_counter[__nesc_mote] = 0;
   projectC$locked[__nesc_mote] = FALSE;
   projectC$paired[__nesc_mote] = FALSE;
+  projectC$other_paired[__nesc_mote] = FALSE;
   projectC$paired_with[__nesc_mote] = 255;
   projectC$received_from[__nesc_mote] = 255;
   memset((void *)&projectC$key[__nesc_mote], 0, sizeof projectC$key[__nesc_mote]);

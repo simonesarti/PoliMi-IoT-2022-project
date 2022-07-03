@@ -6,8 +6,8 @@ typedef enum {
 }msg_enum;
 
 typedef enum {	
-	CHILD = 0,
-	PARENT = 1,
+	PARENT = 0,
+	CHILD = 1,
 }mote_type_t;
 
 typedef enum{

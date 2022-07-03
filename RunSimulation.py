@@ -112,11 +112,12 @@ print ("Start simulation with TOSSIM! \n\n")
 
 for i in range(0,5000):
 	if (i == 2000): 
-		node0.turnOff();
-		print "\n SHUTTING DOWN NODE 0 \n"
+		node1.turnOff();
+		print "\n SHUTTING DOWN NODE 1 \n"
 	t.runNextEvent()
 	
 print ("\nSimulation finished!\n\n");
+
 
 
 

@@ -32,6 +32,7 @@ implementation {
 	uint8_t retransmittion_counter=0;
   	bool locked = FALSE;
   	bool paired = FALSE;
+  	bool other_paired = FALSE;
   	uint8_t paired_with = 255;
   	uint8_t received_from = 255;
 	char key[21];	//last for \0 character
@@ -66,14 +67,16 @@ implementation {
 	const char* string_msg_type(msg_type_t msg_type);
 	const char* string_ks(kinematic_status_t ks);
 	
+	void try_info_phase();
+	
 //*****************FUNCTION DEFINITIONS*******************
 	
 	void set_mote_type(){
 		
 		if(TOS_NODE_ID%2==0){
-			mote_type=CHILD;
-		}else{
 			mote_type=PARENT;
+		}else{
+			mote_type=CHILD;
 		}
 		dbg("setting", "Mote%hhu set to type %s\n",TOS_NODE_ID,string_mote_type(mote_type));
 	}
@@ -214,8 +217,8 @@ implementation {
 	
 	
 	const char* string_mote_type(mote_type_t mote_type){
-		if(mote_type==PARENT){return "CHILD";}
-		if(mote_type==CHILD){return "PARENT";}
+		if(mote_type==PARENT){return "PARENT";}
+		if(mote_type==CHILD){return "CHILD";}
 	}
 	
 	const char* string_msg_type(msg_type_t msg_type){
@@ -230,6 +233,14 @@ implementation {
 		if(ks==WALKING){return "WALKING";}
 		if(ks==RUNNING){return "RUNNING";}
 		if(ks==FALLING){return "FALLING";}
+	}
+	
+	void try_info_phase(){
+	
+		if(paired && other_paired && mote_type == CHILD){
+			dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
+			call Info_Timer.startPeriodic(info_Tms);
+		}
 	}
 	
 //***************************MAIN***************************************************************************************************************************//
@@ -352,17 +363,14 @@ implementation {
 				}
 				else{
 				
-					if(msg->msg_type == PAIRING_RESP && paired){
+					if(msg->msg_type == PAIRING_RESP){
 						dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%hhu\n",TOS_NODE_ID);
-						if(mote_type == CHILD){
-							dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
-							call Info_Timer.startPeriodic(info_Tms);
-						
-						}
+						other_paired=TRUE;
+						try_info_phase();
 					}
 					if (msg->msg_type == INFO){
 						dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
-						//retransmittion_counter=0;
+						retransmittion_counter=0;
 					}
 				
 				}
@@ -404,6 +412,7 @@ implementation {
 				dbg("message", "mote%hhu received PAIRING RESP from mote%hhu. Pairing with it\n",TOS_NODE_ID, paired_with);
 				dbg("pairing_timer","stopping PAIRING timer on mote%hhu\n",TOS_NODE_ID);
 				call Pairing_Timer.stop();
+				try_info_phase();
 				
 			}
 
