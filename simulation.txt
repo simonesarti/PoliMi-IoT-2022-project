@@ -1,143 +1,45 @@
 DEBUG (0): Application booted on node 0.
 DEBUG (0): Mote0 set to type PARENT
 DEBUG (0): Mote0 set key to qwertyuiopasdfghjklz
-DEBUG (3): Application booted on node 3.
-DEBUG (3): Mote3 set to type CHILD
-DEBUG (3): Mote3 set key to zlkjhgfdsapoiuytrewq
-DEBUG (2): Application booted on node 2.
-DEBUG (2): Mote2 set to type PARENT
-DEBUG (2): Mote2 set key to zlkjhgfdsapoiuytrewq
+DEBUG (0): Radio ON on mote0!
+DEBUG (0): Started PAIRING TIMER on mote0 (not already paired)
 DEBUG (1): Application booted on node 1.
 DEBUG (1): Mote1 set to type CHILD
 DEBUG (1): Mote1 set key to qwertyuiopasdfghjklz
-DEBUG (0): Radio ON on mote0!
-DEBUG (0): Started PAIRING TIMER on mote0 (not already paired)
 DEBUG (1): Radio ON on mote1!
 DEBUG (1): Started PAIRING TIMER on mote1 (not already paired)
-DEBUG (3): Radio ON on mote3!
-DEBUG (3): Started PAIRING TIMER on mote3 (not already paired)
-DEBUG (2): Radio ON on mote2!
-DEBUG (2): Started PAIRING TIMER on mote2 (not already paired)
 DEBUG (0): pairing Timer on mote0 fired
 DEBUG (0): Radio on mote0 not locked, sending the PAIRING message
 DEBUG (0): Mote0 set fields for the PAIRING message. senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE 
-DEBUG (0): mote0 is broadcasting the PAIRINIG message at time 0:0:4.882812510
+DEBUG (0): mote0 is broadcasting the PAIRINIG message at time 0:0:5.882812510
 DEBUG (0): radio on mote0 has been locked
-DEBUG (2): pairing Timer on mote2 fired
-DEBUG (2): Radio on mote2 not locked, sending the PAIRING message
-DEBUG (2): Mote2 set fields for the PAIRING message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
-DEBUG (2): mote2 is broadcasting the PAIRINIG message at time 0:0:4.882812510
-DEBUG (2): radio on mote2 has been locked
-DEBUG (3): pairing Timer on mote3 fired
-DEBUG (3): Radio on mote3 not locked, sending the PAIRING message
-DEBUG (3): Mote3 set fields for the PAIRING message. senderID:3, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
-DEBUG (3): mote3 is broadcasting the PAIRINIG message at time 0:0:4.882812510
-DEBUG (3): radio on mote3 has been locked
-DEBUG (1): pairing Timer on mote1 fired
-DEBUG (1): Radio on mote1 not locked, sending the PAIRING message
-DEBUG (1): Mote1 set fields for the PAIRING message. senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE 
-DEBUG (1): mote1 is broadcasting the PAIRINIG message at time 0:0:4.882812510
-DEBUG (1): radio on mote1 has been locked
-DEBUG (0): mote0 received PAIRING MESSAGE from mote1 with same key, sending PAIRING RESP
-DEBUG (0): Mote0 set fields for the PAIRING RESPONSE message, senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE, type:PAIRING_RESP 
-DEBUG (0): Mote0 Setting ack flag for the PAIRING RESPONSE message
-DEBUG (1): Packet sending from mote1 sent correctly
-DEBUG (1): radio on mote1 has been unlocked
-ERROR (1): mote1 WAS ACKED: 0, type:PAIRING
-ERROR (1): senderID:1,key:qwertyuiopasdfghjklz,type:PAIRING,x:0DEBUG (3): Packet sending from mote3 sent correctly
-DEBUG (3): radio on mote3 has been unlocked
-ERROR (3): mote3 WAS ACKED: 0, type:PAIRING
-ERROR (3): senderID:3,key:zlkjhgfdsapoiuytrewq,type:PAIRING,x:0DEBUG (2): Packet sending from mote2 sent correctly
-DEBUG (2): radio on mote2 has been unlocked
-ERROR (2): mote2 WAS ACKED: 0, type:PAIRING
-ERROR (2): senderID:2,key:zlkjhgfdsapoiuytrewq,type:PAIRING,x:0DEBUG (1): mote1 received PAIRING RESP from mote0. Pairing with it
-DEBUG (1): stopping PAIRING timer on mote1
-DEBUG (0): Packet sending from mote0 sent correctly
-DEBUG (0): radio on mote0 has been unlocked
-ERROR (0): mote0 WAS ACKED: 1, type:PAIRING_RESP
-DEBUG (0): pairing Timer on mote0 fired
-DEBUG (0): Radio on mote0 not locked, sending the PAIRING message
-DEBUG (0): Mote0 set fields for the PAIRING message. senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE 
-DEBUG (0): mote0 is broadcasting the PAIRINIG message at time 0:0:9.765625010
-DEBUG (0): radio on mote0 has been locked
-DEBUG (3): pairing Timer on mote3 fired
-DEBUG (3): Radio on mote3 not locked, sending the PAIRING message
-DEBUG (3): Mote3 set fields for the PAIRING message. senderID:3, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
-DEBUG (3): mote3 is broadcasting the PAIRINIG message at time 0:0:9.765625010
-DEBUG (3): radio on mote3 has been locked
-DEBUG (2): pairing Timer on mote2 fired
-DEBUG (2): Radio on mote2 not locked, sending the PAIRING message
-DEBUG (2): Mote2 set fields for the PAIRING message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
-DEBUG (2): mote2 is broadcasting the PAIRINIG message at time 0:0:9.765625010
-DEBUG (2): radio on mote2 has been locked
 DEBUG (1): mote1 received PAIRING MESSAGE from mote0 with same key, sending PAIRING RESP
-DEBUG (1): Mote1 set fields for the PAIRING RESPONSE message, senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE, type:PAIRING_RESP 
+DEBUG (1): Mote1 set fields for the PAIRING RESPONSE message, senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE
 DEBUG (1): Mote1 Setting ack flag for the PAIRING RESPONSE message
-DEBUG (1): send_pairing_resp() type:PAIRING_RESPDEBUG (1): mote1 sending unicast reply to the PAIRINIG message to mote0 at time 0:0:9.770965555 
+DEBUG (1): mote1 sending unicast reply to the PAIRINIG message to mote0 at time 0:0:5.893951361 
 DEBUG (1): radio on mote1 has been locked
 DEBUG (0): Packet sending from mote0 sent correctly
 DEBUG (0): radio on mote0 has been unlocked
-ERROR (0): mote0 WAS ACKED: 0, type:PAIRING
-ERROR (0): senderID:0,key:qwertyuiopasdfghjklz,type:PAIRING,x:0DEBUG (3): mote3 received PAIRING MESSAGE from mote2 with same key, sending PAIRING RESP
-DEBUG (3): Mote3 set fields for the PAIRING RESPONSE message, senderID:3, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE, type:PAIRING_RESP 
-DEBUG (3): Mote3 Setting ack flag for the PAIRING RESPONSE message
-DEBUG (2): Packet sending from mote2 sent correctly
-DEBUG (2): radio on mote2 has been unlocked
-ERROR (2): mote2 WAS ACKED: 0, type:PAIRING
-ERROR (2): senderID:2,key:zlkjhgfdsapoiuytrewq,type:PAIRING,x:0DEBUG (2): mote2 received PAIRING RESP from mote3. Pairing with it
-DEBUG (2): stopping PAIRING timer on mote2
-DEBUG (3): Packet sending from mote3 sent correctly
-DEBUG (3): radio on mote3 has been unlocked
-ERROR (3): mote3 WAS ACKED: 1, type:PAIRING_RESP
+ERROR (0): mote0 FAILED TO RECEIVE A PARINING ACK
 DEBUG (0): mote0 received PAIRING RESP from mote1. Pairing with it
 DEBUG (0): stopping PAIRING timer on mote0
 DEBUG (1): Packet sending from mote1 sent correctly
 DEBUG (1): radio on mote1 has been unlocked
-ERROR (1): mote1 WAS ACKED: 1, type:PAIRING_RESP
-DEBUG (1): PAIRING RESP ACK received by mote1
-DEBUG (1): starting INFO timer on mote1
-DEBUG (3): pairing Timer on mote3 fired
-DEBUG (3): Radio on mote3 not locked, sending the PAIRING message
-DEBUG (3): Mote3 set fields for the PAIRING message. senderID:3, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
-DEBUG (3): mote3 is broadcasting the PAIRINIG message at time 0:0:14.648437510
-DEBUG (3): radio on mote3 has been locked
-DEBUG (2): mote2 received PAIRING MESSAGE from mote3 with same key, sending PAIRING RESP
-DEBUG (2): Mote2 set fields for the PAIRING RESPONSE message, senderID:2, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE, type:PAIRING_RESP 
-DEBUG (2): Mote2 Setting ack flag for the PAIRING RESPONSE message
-DEBUG (2): send_pairing_resp() type:PAIRING_RESPDEBUG (2): mote2 sending unicast reply to the PAIRINIG message to mote3 at time 0:0:14.656417810 
-DEBUG (2): radio on mote2 has been locked
-DEBUG (3): Packet sending from mote3 sent correctly
-DEBUG (3): radio on mote3 has been unlocked
-ERROR (3): mote3 WAS ACKED: 0, type:PAIRING
-ERROR (3): senderID:3,key:zlkjhgfdsapoiuytrewq,type:PAIRING,x:0DEBUG (3): mote3 received PAIRING RESP from mote2. Pairing with it
-DEBUG (3): stopping PAIRING timer on mote3
-DEBUG (2): Packet sending from mote2 sent correctly
-DEBUG (2): radio on mote2 has been unlocked
-ERROR (2): mote2 WAS ACKED: 1, type:PAIRING_RESP
-DEBUG (2): PAIRING RESP ACK received by mote2
-DEBUG (1): info Timer on mote1 fired
-DEBUG (1): Radio on mote1 not locked, sending the INFO message
-DEBUG (1): Mote1 set fields for the INFO message. senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:STANDING, isResend:0 
-DEBUG (1): Mote1 Setting ack flag for the INFO message
-DEBUG (1): mote1 is sending the INFO message at time 0:0:19.545898447
+DEBUG (1): pairing Timer on mote1 fired
+DEBUG (1): Radio on mote1 not locked, sending the PAIRING message
+DEBUG (1): Mote1 set fields for the PAIRING message. senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE 
+DEBUG (1): mote1 is broadcasting the PAIRINIG message at time 0:0:6.882812510
 DEBUG (1): radio on mote1 has been locked
-DEBUG (0): mote0 received INFO from paired mote1
-DEBUG (0): mote0 started OutOfRange TIMER countdown
+DEBUG (0): mote0 received PAIRING MESSAGE from mote1 with same key, sending PAIRING RESP
+DEBUG (0): Mote0 set fields for the PAIRING RESPONSE message, senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE
+DEBUG (0): Mote0 Setting ack flag for the PAIRING RESPONSE message
+DEBUG (0): mote0 sending unicast reply to the PAIRINIG message to mote1 at time 0:0:6.890396083 
+DEBUG (0): radio on mote0 has been locked
 DEBUG (1): Packet sending from mote1 sent correctly
 DEBUG (1): radio on mote1 has been unlocked
-ERROR (1): mote1 WAS ACKED: 1, type:INFO
-DEBUG (1): INFO ACK received by mote1
-DEBUG (1): info Timer on mote1 fired
-DEBUG (1): Radio on mote1 not locked, sending the INFO message
-DEBUG (1): Mote1 set fields for the INFO message. senderID:1, key:qwertyuiopasdfghjklz, x:33614, y:30178, kin_status:WALKING, isResend:0 
-DEBUG (1): Mote1 Setting ack flag for the INFO message
-DEBUG (1): mote1 is sending the INFO message at time 0:0:29.311523447
-DEBUG (1): radio on mote1 has been locked
-DEBUG (0): mote0 received INFO from paired mote1
-DEBUG (0): mote0 started OutOfRange TIMER countdown
-DEBUG (1): Packet sending from mote1 sent correctly
-DEBUG (1): radio on mote1 has been unlocked
-ERROR (1): mote1 WAS ACKED: 1, type:INFO
-DEBUG (1): INFO ACK received by mote1
-DEBUG (0): out_of_range Timer on mote0 fired
-DEBUG (0):  MISSING ALERT: Mote0 has not received messages from child for more than 60s. Last known position was (x:33614, y:30178)
+ERROR (1): mote1 FAILED TO RECEIVE A PARINING ACK
+DEBUG (1): mote1 received PAIRING RESP from mote0. Pairing with it
+DEBUG (1): stopping PAIRING timer on mote1
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): PAIRING RESP ACK received by mote0

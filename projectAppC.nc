@@ -1,5 +1,4 @@
 #include "project.h"
-//#include "project_serial.h"
 
 configuration projectAppC {}
 
@@ -17,7 +16,6 @@ implementation {
   components new FakeSensorC();
 
   components ActiveMessageC;
-  //components SerialActiveMessageC;
   
   /****** INTERFACES *****/
   App.Boot -> MainC.Boot;
@@ -40,13 +38,5 @@ implementation {
   
   //Fake Sensor read
   App.FakeSensor -> FakeSensorC;
-
-  // Serial port components
-  //App.SerialControl -> SerialActiveMessageC;
-  //App.SerialAMSend -> SerialActiveMessageC.AMSend[AM_MY_MSG];
-  //App.SerialPacket -> SerialActiveMessageC;
-
-
-
 }
 

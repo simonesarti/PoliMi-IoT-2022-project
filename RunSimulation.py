@@ -6,6 +6,7 @@ print ("********************************************")
 
 import sys
 import time
+import serial
 
 from TOSSIM import *
 
@@ -42,28 +43,29 @@ for channel in channels:
 
 print "Creating node 0...";
 node0 =t.getNode(0);
-time0 = 0*t.ticksPerSecond();
+time0 = 1*t.ticksPerSecond();
 node0.bootAtTime(time0);
 print ">>>Will boot at time",  time0/t.ticksPerSecond(), "[sec]";
 
 print "Creating node 1...";
 node1 = t.getNode(1);
-time1 = 0*t.ticksPerSecond();
+time1 = 2*t.ticksPerSecond();
 node1.bootAtTime(time1);
 print ">>>Will boot at time", time1/t.ticksPerSecond(), "[sec]";
 
+"""
 print "Creating node 2...";
 node2 = t.getNode(2);
-time2 = 0*t.ticksPerSecond();
+time2 = 3*t.ticksPerSecond();
 node2.bootAtTime(time2);
 print ">>>Will boot at time", time2/t.ticksPerSecond(), "[sec]";
 
 print "Creating node 3...";
 node3 = t.getNode(3);
-time3 = 0*t.ticksPerSecond();
+time3 = 4*t.ticksPerSecond();
 node3.bootAtTime(time3);
 print ">>>Will boot at time", time3/t.ticksPerSecond(), "[sec]";
-
+"""
 print("Creating radio channels...")
 f = open(topofile, "r")
 lines = f.readlines()
@@ -93,25 +95,40 @@ for line in lines:
             mid_compl = 0
             sys.stdout.write ("#")
             sys.stdout.flush()
-        for i in range(0, 4):
+        for i in range(0, 2):
+        #for i in range(0, 4):
             t.getNode(i).addNoiseTraceReading(val)
 print("Done!")
 
-for i in range(0, 4):
+#create noise models
+#for i in range(0, 4):
+for i in range(0, 2):
     print (">>>Creating noise model for node: ",i)
     t.getNode(i).createNoiseModel()
 
 
-print ("Start simulation with TOSSIM! \n\n\n")
-node1off = False
+#run the simulation
+print ("Start simulation with TOSSIM! \n\n")
 
-simtime = t.time()
-while (t.time() < simtime + (200 * t.ticksPerSecond())):
+for i in range(0,10000):
+	if (i == 3000): 
+		node1.turnOff();
+		print "\n SHUTTING DOWN NODE 1 \n"
 	t.runNextEvent()
-	if(node1off == False):
-		if (t.time() >= (30 * t.ticksPerSecond())): 
-			node1.turnOff()
-			node1Off = True
 	
-print ("\n\n\nSimulation finished!")
+print ("\nSimulation finished!\n\n");
+
+
+
+#configure the serial connections
+ser = serial.Serial(port ="/dev/ttyS1", baudrate=9600, rtscts=True, dsrdtr=True)  # open serial port
+print (" Serial forwarder using port: ", ser.portstr)   # check which port is being used
+#print ("\n >>remind to use this as a root!\n")
+ser.write("\n >serial test ALARM! \n go go ALARM! go :) ")  # write test string
+with open('simulation.txt') as fp:
+    for line in fp:
+        if "ALERT" in line:
+        	ser.write(line);	#print alerts on serial port
+
+ser.close(); # close serial port
 

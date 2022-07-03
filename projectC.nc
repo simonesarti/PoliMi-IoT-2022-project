@@ -116,10 +116,7 @@ implementation {
 		
 		dbg("pairing_message", "Mote%hhu set fields for the PAIRING message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s \n",
 		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status));
-		
-		//request ack
-		//call PacketAcknowledgements.requestAck(&packet);
-		//dbg("pairing_ack", "Mote%u Setting ack flag for the PAIRING message\n",TOS_NODE_ID);		
+			
 		
 		return msg;
 	}
@@ -141,8 +138,8 @@ implementation {
 		msg->y = 0;
 		msg->kinematic_status = NONE;
 		
-		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s, type:%s \n",
-		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status),string_msg_type(msg->msg_type));
+		dbg("pairing_resp_message", "Mote%hhu set fields for the PAIRING RESPONSE message, senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s\n",
+		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status));
 
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
@@ -287,20 +284,10 @@ implementation {
   		if (err == SUCCESS) {
       		
       		dbg("radio_status","Radio ON on mote%hhu!\n", TOS_NODE_ID);
-			if (!paired){
-				dbg("pairing_timer","Started PAIRING TIMER on mote%hhu (not already paired)\n",TOS_NODE_ID);
-				call Pairing_Timer.startPeriodic(pairing_Tms);
-				
-			}
-			else{
-				if(mote_type==CHILD){
-					dbg("info_timer","Started INFO TIMER on mote%hhu (already paired)\n",TOS_NODE_ID);
-					call Info_Timer.startPeriodic(info_Tms);
-					
 
-				}
+			dbg("pairing_timer","Started PAIRING TIMER on mote%hhu\n",TOS_NODE_ID);
+			call Pairing_Timer.startPeriodic(pairing_Tms);
 				
-			}
 				
     	}else{
       		
@@ -383,23 +370,17 @@ implementation {
 			}
 
 			//deal with acks
-			//dbgerror("message", "mote%hhu WAS ACKED: %u, type:%s\n",TOS_NODE_ID, call PacketAcknowledgements.wasAcked(buf),string_msg_type(msg->msg_type));
 			if (!call PacketAcknowledgements.wasAcked(buf)){
 				
-				//if(msg->msg_type == PAIRING){
-				//	dbgerror("message","senderID:%hhu,key:%s,type:%s,x:%u",msg->senderID,msg->key,string_msg_type(msg->msg_type),msg->x);
-				//}
-				
 				if(msg->msg_type == PAIRING_RESP){
-					dbgerror("message", "mote%hhu WAS NOT ACKED in PAIRING RESPONSE: %u\n",TOS_NODE_ID);
 					dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
 					send_pairing_resp();
 					
 				}
-				if(msg->msg_type == INFO && retransmittion_counter<2){
+				if(msg->msg_type == INFO /*&& retransmittion_counter<2*/){
 					dbg("info_ack","INFO ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
 					send_info_message(TRUE);
-					retransmittion_counter++;
+					//retransmittion_counter++;
 				}
 				
 			}
@@ -415,7 +396,7 @@ implementation {
 				}
 				if (msg->msg_type == INFO){
 					dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
-					retransmittion_counter=0;
+					//retransmittion_counter=0;
 				}
 				
 			}
