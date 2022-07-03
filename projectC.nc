@@ -372,11 +372,6 @@ implementation {
 			//deal with acks
 			if (!call PacketAcknowledgements.wasAcked(buf)){
 				
-				if(msg->msg_type == PAIRING_RESP){
-					dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
-					send_pairing_resp();
-					
-				}
 				if(msg->msg_type == INFO /*&& retransmittion_counter<2*/){
 					dbg("info_ack","INFO ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
 					send_info_message(TRUE);
