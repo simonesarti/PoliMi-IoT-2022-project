@@ -2,27 +2,43 @@ DEBUG (0): Application booted on node 0.
 DEBUG (0): Mote0 set to type PARENT
 DEBUG (0): Mote0 set key to qwertyuiopasdfghjklz
 DEBUG (0): Radio ON on mote0!
-DEBUG (0): Started PAIRING TIMER on mote0 (not already paired)
+DEBUG (0): Started PAIRING TIMER on mote0
+
 DEBUG (1): Application booted on node 1.
 DEBUG (1): Mote1 set to type CHILD
 DEBUG (1): Mote1 set key to qwertyuiopasdfghjklz
 DEBUG (1): Radio ON on mote1!
-DEBUG (1): Started PAIRING TIMER on mote1 (not already paired)
+DEBUG (1): Started PAIRING TIMER on mote1
+
+DEBUG (2): Application booted on node 2.
+DEBUG (2): Mote2 set to type PARENT
+DEBUG (2): Mote2 set key to zlkjhgfdsapoiuytrewq
+DEBUG (2): Radio ON on mote2!
+DEBUG (2): Started PAIRING TIMER on mote2
+
+DEBUG (3): Application booted on node 3.
+DEBUG (3): Mote3 set to type CHILD
+DEBUG (3): Mote3 set key to zlkjhgfdsapoiuytrewq
+DEBUG (3): Radio ON on mote3!
+DEBUG (3): Started PAIRING TIMER on mote3
+
 DEBUG (0): pairing Timer on mote0 fired
 DEBUG (0): Radio on mote0 not locked, sending the PAIRING message
 DEBUG (0): Mote0 set fields for the PAIRING message. senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE 
 DEBUG (0): mote0 is broadcasting the PAIRINIG message at time 0:0:5.882812510
 DEBUG (0): radio on mote0 has been locked
+
 DEBUG (1): mote1 received PAIRING MESSAGE from mote0 with same key, sending PAIRING RESP
 DEBUG (1): Mote1 set fields for the PAIRING RESPONSE message, senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE
 DEBUG (1): Mote1 Setting ack flag for the PAIRING RESPONSE message
-DEBUG (1): mote1 sending unicast reply to the PAIRINIG message to mote0 at time 0:0:5.893951361 
+DEBUG (1): mote1 sending unicast reply to the PAIRINIG message to mote0 at time 0:0:5.891982988 
 DEBUG (1): radio on mote1 has been locked
+
 DEBUG (0): Packet sending from mote0 sent correctly
 DEBUG (0): radio on mote0 has been unlocked
-ERROR (0): mote0 FAILED TO RECEIVE A PARINING ACK
 DEBUG (0): mote0 received PAIRING RESP from mote1. Pairing with it
 DEBUG (0): stopping PAIRING timer on mote0
+
 DEBUG (1): Packet sending from mote1 sent correctly
 DEBUG (1): radio on mote1 has been unlocked
 DEBUG (1): pairing Timer on mote1 fired
@@ -30,16 +46,319 @@ DEBUG (1): Radio on mote1 not locked, sending the PAIRING message
 DEBUG (1): Mote1 set fields for the PAIRING message. senderID:1, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE 
 DEBUG (1): mote1 is broadcasting the PAIRINIG message at time 0:0:6.882812510
 DEBUG (1): radio on mote1 has been locked
+
 DEBUG (0): mote0 received PAIRING MESSAGE from mote1 with same key, sending PAIRING RESP
 DEBUG (0): Mote0 set fields for the PAIRING RESPONSE message, senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:NONE
 DEBUG (0): Mote0 Setting ack flag for the PAIRING RESPONSE message
-DEBUG (0): mote0 sending unicast reply to the PAIRINIG message to mote1 at time 0:0:6.890396083 
+DEBUG (0): mote0 sending unicast reply to the PAIRINIG message to mote1 at time 0:0:6.889160129 
 DEBUG (0): radio on mote0 has been locked
+
 DEBUG (1): Packet sending from mote1 sent correctly
 DEBUG (1): radio on mote1 has been unlocked
-ERROR (1): mote1 FAILED TO RECEIVE A PARINING ACK
 DEBUG (1): mote1 received PAIRING RESP from mote0. Pairing with it
 DEBUG (1): stopping PAIRING timer on mote1
+
 DEBUG (0): Packet sending from mote0 sent correctly
 DEBUG (0): radio on mote0 has been unlocked
 DEBUG (0): PAIRING RESP ACK received by mote0
+DEBUG (0): starting INFO timer on mote0
+
+DEBUG (2): pairing Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the PAIRING message
+DEBUG (2): Mote2 set fields for the PAIRING message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
+DEBUG (2): mote2 is broadcasting the PAIRINIG message at time 0:0:7.882812510
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received PAIRING MESSAGE from mote2 with same key, sending PAIRING RESP
+DEBUG (3): Mote3 set fields for the PAIRING RESPONSE message, senderID:3, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE
+DEBUG (3): Mote3 Setting ack flag for the PAIRING RESPONSE message
+DEBUG (3): mote3 sending unicast reply to the PAIRINIG message to mote2 at time 0:0:7.891036949 
+DEBUG (3): radio on mote3 has been locked
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): mote2 received PAIRING RESP from mote3. Pairing with it
+DEBUG (2): stopping PAIRING timer on mote2
+
+DEBUG (3): Packet sending from mote3 sent correctly
+DEBUG (3): radio on mote3 has been unlocked
+DEBUG (3): pairing Timer on mote3 fired
+DEBUG (3): Radio on mote3 not locked, sending the PAIRING message
+DEBUG (3): Mote3 set fields for the PAIRING message. senderID:3, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE 
+DEBUG (3): mote3 is broadcasting the PAIRINIG message at time 0:0:8.882812510
+DEBUG (3): radio on mote3 has been locked
+
+DEBUG (2): mote2 received PAIRING MESSAGE from mote3 with same key, sending PAIRING RESP
+DEBUG (2): Mote2 set fields for the PAIRING RESPONSE message, senderID:2, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:NONE
+DEBUG (2): Mote2 Setting ack flag for the PAIRING RESPONSE message
+DEBUG (2): mote2 sending unicast reply to the PAIRINIG message to mote3 at time 0:0:8.886169424 
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): Packet sending from mote3 sent correctly
+DEBUG (3): radio on mote3 has been unlocked
+DEBUG (3): mote3 received PAIRING RESP from mote2. Pairing with it
+DEBUG (3): stopping PAIRING timer on mote3
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): PAIRING RESP ACK received by mote2
+DEBUG (2): starting INFO timer on mote2
+
+DEBUG (0): info Timer on mote0 fired
+DEBUG (0): Radio on mote0 not locked, sending the INFO message
+DEBUG (0): Mote0 set fields for the INFO message. senderID:0, key:qwertyuiopasdfghjklz, x:0, y:0, kin_status:STANDING, isResend:0 
+DEBUG (0): Mote0 Setting ack flag for the INFO message
+DEBUG (0): mote0 is sending the INFO message at time 0:0:16.664062510
+DEBUG (0): radio on mote0 has been locked
+
+DEBUG (1): mote1 received INFO from paired mote0
+DEBUG (1): mote1 started OutOfRange TIMER countdown
+
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): INFO ACK received by mote0
+
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:0, y:0, kin_status:STANDING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:0:18.657226572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+
+DEBUG (0): info Timer on mote0 fired
+DEBUG (0): Radio on mote0 not locked, sending the INFO message
+DEBUG (0): Mote0 set fields for the INFO message. senderID:0, key:qwertyuiopasdfghjklz, x:16807, y:15089, kin_status:RUNNING, isResend:0 
+DEBUG (0): Mote0 Setting ack flag for the INFO message
+DEBUG (0): mote0 is sending the INFO message at time 0:0:26.429687510
+DEBUG (0): radio on mote0 has been locked
+
+DEBUG (1): mote1 received INFO from paired mote0
+DEBUG (1): mote1 started OutOfRange TIMER countdown
+
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): INFO ACK received by mote0
+
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:50421, y:45267, kin_status:STANDING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:0:28.422851572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+
+DEBUG (0): info Timer on mote0 fired
+DEBUG (0): Radio on mote0 not locked, sending the INFO message
+DEBUG (0): Mote0 set fields for the INFO message. senderID:0, key:qwertyuiopasdfghjklz, x:3114, y:46978, kin_status:RUNNING, isResend:0 
+DEBUG (0): Mote0 Setting ack flag for the INFO message
+DEBUG (0): mote0 is sending the INFO message at time 0:0:36.195312510
+DEBUG (0): radio on mote0 has been locked
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): INFO ACK not received by mote0, resending...
+DEBUG (0): Mote0 set fields for the INFO message. senderID:0, key:qwertyuiopasdfghjklz, x:3114, y:46978, kin_status:RUNNING, isResend:1 
+DEBUG (0): Mote0 Setting ack flag for the INFO message
+DEBUG (0): mote0 is sending the INFO message at time 0:0:36.205612132
+DEBUG (0): radio on mote0 has been locked
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): INFO ACK not received by mote0, resending...
+DEBUG (0): Mote0 set fields for the INFO message. senderID:0, key:qwertyuiopasdfghjklz, x:3114, y:46978, kin_status:RUNNING, isResend:1 
+DEBUG (0): Mote0 Setting ack flag for the INFO message
+DEBUG (0): mote0 is sending the INFO message at time 0:0:36.213317776
+DEBUG (0): radio on mote0 has been locked
+
+DEBUG (1): mote1 received INFO from paired mote0
+DEBUG (1): mote1 started OutOfRange TIMER countdown
+
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): INFO ACK received by mote0
+
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:9343, y:9863, kin_status:WALKING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:0:38.188476572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+
+DEBUG (0): info Timer on mote0 fired
+DEBUG (0): Radio on mote0 not locked, sending the INFO message
+DEBUG (0): Mote0 set fields for the INFO message. senderID:0, key:qwertyuiopasdfghjklz, x:36568, y:2558, kin_status:STANDING, isResend:0 
+DEBUG (0): Mote0 Setting ack flag for the INFO message
+DEBUG (0): mote0 is sending the INFO message at time 0:0:45.960937510
+DEBUG (0): radio on mote0 has been locked
+
+DEBUG (1): mote1 received INFO from paired mote0
+DEBUG (1): mote1 started OutOfRange TIMER countdown
+
+DEBUG (0): Packet sending from mote0 sent correctly
+DEBUG (0): radio on mote0 has been unlocked
+DEBUG (0): INFO ACK received by mote0
+
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:44168, y:7676, kin_status:WALKING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:0:47.954101572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:3305, y:51657, kin_status:RUNNING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:0:57.719726572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:14246, y:37798, kin_status:WALKING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:1:7.485351572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:42454, y:43847, kin_status:RUNNING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:1:17.250976572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:19145, y:56316, kin_status:WALKING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:1:27.016601572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:33077, y:49800, kin_status:RUNNING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:1:36.782226572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+
+DEBUG (1): out_of_range Timer on mote1 fired
+DEBUG (1): MISSING ALERT: Mote1 has not received messages from child for more than 60s. Last known position was (x:36568, y:2558)
+
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:38666, y:13536, kin_status:WALKING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:1:46.547851572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:55683, y:26265, kin_status:RUNNING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:1:56.313476572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:11725, y:7608, kin_status:STANDING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:2:6.079101572
+DEBUG (2): radio on mote2 has been locked
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:62361, y:52008, kin_status:RUNNING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:2:15.844726572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2
+DEBUG (2): info Timer on mote2 fired
+DEBUG (2): Radio on mote2 not locked, sending the INFO message
+DEBUG (2): Mote2 set fields for the INFO message. senderID:2, key:zlkjhgfdsapoiuytrewq, x:59098, y:11561, kin_status:FALLING, isResend:0 
+DEBUG (2): Mote2 Setting ack flag for the INFO message
+DEBUG (2): mote2 is sending the INFO message at time 0:2:25.610351572
+DEBUG (2): radio on mote2 has been locked
+
+DEBUG (3): mote3 received INFO from paired mote2
+DEBUG (3): FALLING ALERT: Child has fallen, go pick him up at position (x:59098, y:11561)
+DEBUG (3): mote3 started OutOfRange TIMER countdown
+
+DEBUG (2): Packet sending from mote2 sent correctly
+DEBUG (2): radio on mote2 has been unlocked
+DEBUG (2): INFO ACK received by mote2

@@ -39,7 +39,7 @@ implementation {
   	kinematic_status_t kinematic_status;
 	
   	info_data_t sensor_read;
-	msg_type_t type_message;
+  	//my_msg_t* msg;
 
 	uint16_t pairing_Tms=5000; //5s
 	uint16_t info_Tms=10000;	//10s
@@ -49,18 +49,14 @@ implementation {
 	uint16_t last_y;
 	kinematic_status_t last_kinematic_status;
   	
-  	char string1[21]={"qwertyuiopasdfghjklz"}; 
-  	char string2[21]={"zlkjhgfdsapoiuytrewq"};
+  	char string1[21]={"qwertyuiopasdfghjklz\0"}; 
+  	char string2[21]={"zlkjhgfdsapoiuytrewq\0"};
 
 
 //*****************FUNCTION DECLARATIONS*******************
 	void set_mote_type();
 	void set_default_string();
 	void set_initial_parameters();
-	
-	my_msg_t* fill_pairing_msg();
-	my_msg_t* fill_pairing_resp();  
-	my_msg_t* fill_info_msg(bool isResend);
 	
 	void send_broadcast_key();
 	void send_pairing_resp();
@@ -75,9 +71,9 @@ implementation {
 	void set_mote_type(){
 		
 		if(TOS_NODE_ID%2==0){
-			mote_type=PARENT;
-		}else{
 			mote_type=CHILD;
+		}else{
+			mote_type=PARENT;
 		}
 		dbg("setting", "Mote%hhu set to type %s\n",TOS_NODE_ID,string_mote_type(mote_type));
 	}
@@ -95,39 +91,44 @@ implementation {
 		locked=FALSE;
 		set_mote_type();
 		set_default_string();
-		
 	}
+	
+	void send_broadcast_key(){
 
-	my_msg_t* fill_pairing_msg(){
-		//create the message
-		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
-		if (msg == NULL) {
+		my_msg_t* bk_msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
+		
+		if (bk_msg == NULL) {
 			dbgerror("pairing_message", "failed to create the PAIRING message\n");
-			return NULL;
+			return;
 		}
 		
 		//fill fields
-		msg->msg_type = PAIRING;
-		msg->senderID = TOS_NODE_ID;
-		strcpy(msg->key, key);
-		msg->x = 0;
-		msg->y = 0;
-		msg->kinematic_status = NONE;
+		bk_msg->msg_type = PAIRING;
+		bk_msg->senderID = TOS_NODE_ID;
+		strcpy(bk_msg->key, key);
+		bk_msg->x = 0;
+		bk_msg->y = 0;
+		bk_msg->kinematic_status = NONE;
 		
 		dbg("pairing_message", "Mote%hhu set fields for the PAIRING message. senderID:%hhu, key:%s, x:%u, y:%u, kin_status:%s \n",
-		TOS_NODE_ID, msg->senderID, msg->key, msg->x, msg->y, string_ks(msg->kinematic_status));
+		TOS_NODE_ID, bk_msg->senderID, bk_msg->key, bk_msg->x, bk_msg->y, string_ks(bk_msg->kinematic_status));
+		
 			
-		
-		return msg;
+		if (call AMSend.send(AM_BROADCAST_ADDR, &packet, sizeof(my_msg_t)) == SUCCESS) {
+			
+			dbg("radio_send", "mote%hhu is broadcasting the PAIRINIG message at time %s\n", TOS_NODE_ID, sim_time_string());	
+			dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
+			locked = TRUE;
+			
+		}
 	}
-
-	my_msg_t* fill_pairing_resp(){
+	
+	void send_pairing_resp(){
 		
-		//create the message
 		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
 		if (msg == NULL) {
 			dbgerror("pairing_resp_message", "failed to create the PAIRING RESPONSE message\n");
-			return NULL;
+			return;
 		}
 		
 		//fill fields
@@ -144,17 +145,26 @@ implementation {
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
 		dbg("pairing_resp_ack", "Mote%u Setting ack flag for the PAIRING RESPONSE message\n",TOS_NODE_ID);
-
-		return msg;
+		
+			
+		if (call AMSend.send(received_from, &packet, sizeof(my_msg_t)) == SUCCESS) {
+			
+			dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,received_from, sim_time_string());
+			dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
+			locked = TRUE;
+			
+		}
+			
+			
 	}
 	
-	my_msg_t* fill_info_msg(bool isResend){
+	void send_info_message(bool isResend){
 		
 		//create the message
 		my_msg_t* msg = (my_msg_t*)call Packet.getPayload(&packet, sizeof(my_msg_t));
 		if (msg == NULL) {
 			dbgerror("info_message", "failed to create the INFO message\n");
-			return NULL;
+			return;
 		}
 		
 		//fill fields
@@ -192,64 +202,20 @@ implementation {
 		//request ack
 		call PacketAcknowledgements.requestAck(&packet);
 		dbg("info_ack", "Mote%hhu Setting ack flag for the INFO message\n",TOS_NODE_ID);
+		
 
-		return msg;		
-	}
-	
-	void send_broadcast_key(){
-	
-		my_msg_t* msg = fill_pairing_msg();
-		
-		if (msg != NULL) {
+		if (call AMSend.send(paired_with, &packet, sizeof(my_msg_t)) == SUCCESS) {
 			
-			if (call AMSend.send(AM_BROADCAST_ADDR, &packet, sizeof(my_msg_t)) == SUCCESS) {
-				
-				dbg("radio_send", "mote%hhu is broadcasting the PAIRINIG message at time %s\n", TOS_NODE_ID, sim_time_string());	
-				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
-				locked = TRUE;
-				
-			}
+			dbg("radio_send", "mote%hhu is sending the INFO message at time %s\n", TOS_NODE_ID, sim_time_string());
+			dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
+			locked = TRUE;		
 		}
 	}
 	
-	void send_pairing_resp(){
-		
-		my_msg_t* msg = fill_pairing_resp();
-		
-		if (msg != NULL) {
-			
-			if (call AMSend.send(received_from, &packet, sizeof(my_msg_t)) == SUCCESS) {
-				
-				dbg("radio_send", "mote%hhu sending unicast reply to the PAIRINIG message to mote%hhu at time %s \n", TOS_NODE_ID,received_from, sim_time_string());
-				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
-				locked = TRUE;
-				
-			}
-			
-			
-		}
-	}
-	
-	void send_info_message(bool isResend){
-		
-		my_msg_t* msg=fill_info_msg(isResend);
-		
-		if (msg != NULL) {
-			
-			if (call AMSend.send(paired_with, &packet, sizeof(my_msg_t)) == SUCCESS) {
-				
-				dbg("radio_send", "mote%hhu is sending the INFO message at time %s\n", TOS_NODE_ID, sim_time_string());
-				dbg("radio_status", "radio on mote%hhu has been locked\n",TOS_NODE_ID);
-				locked = TRUE;
-				
-			}
-		}
-		
-	}
 	
 	const char* string_mote_type(mote_type_t mote_type){
-		if(mote_type==PARENT){return "PARENT";}
-		if(mote_type==CHILD){return "CHILD";}
+		if(mote_type==PARENT){return "CHILD";}
+		if(mote_type==CHILD){return "PARENT";}
 	}
 	
 	const char* string_msg_type(msg_type_t msg_type){
@@ -336,7 +302,7 @@ implementation {
 
 		dbg("oor_timer", "out_of_range Timer on mote%hhu fired\n", TOS_NODE_ID);
 		
-		dbg("missing_alarm", " MISSING ALERT: Mote%hhu has not received messages from child for more than 60s. Last known position was (x:%u, y:%u)\n",
+		dbg("missing_alarm", "MISSING ALERT: Mote%hhu has not received messages from child for more than 60s. Last known position was (x:%u, y:%u)\n",
 		 TOS_NODE_ID, last_x, last_y);
 
 	}
@@ -359,43 +325,48 @@ implementation {
 			
 
 
-			//open-close section just because tinyos doesn't like the debug otherwise
+			//open-close section just because tinyos doesn't like the previous debug otherwise
 			{
 			
-			//parse the message
-			my_msg_t* msg = (my_msg_t*)call Packet.getPayload(buf, sizeof(my_msg_t));
-			if (msg == NULL){
-				dbgerror("message", "failed to parse the sent message in sendDone\n");
-				return;
-			}
+				//parse the message
+				my_msg_t* msg = (my_msg_t*)call Packet.getPayload(buf, sizeof(my_msg_t));
+				if (msg == NULL){
+					dbgerror("message", "failed to parse the sent message in sendDone\n");
+					return;
+				}
 
-			//deal with acks
-			if (!call PacketAcknowledgements.wasAcked(buf)){
-				
-				if(msg->msg_type == INFO /*&& retransmittion_counter<2*/){
-					dbg("info_ack","INFO ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
-					send_info_message(TRUE);
-					//retransmittion_counter++;
-				}
-				
-			}
-			else{
-				
-				if(msg->msg_type == PAIRING_RESP && paired){
-					dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%hhu\n",TOS_NODE_ID);
-					if(mote_type == CHILD){
-						dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
-						call Info_Timer.startPeriodic(info_Tms);
-						
+				//deal with acks
+				if (!call PacketAcknowledgements.wasAcked(buf)){
+					
+					if(msg->msg_type == PAIRING_RESP){
+						dbg("pairing_resp_ack","PAIRING RESP ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
+						send_pairing_resp();
 					}
-				}
-				if (msg->msg_type == INFO){
-					dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
-					//retransmittion_counter=0;
-				}
+					
+					if(msg->msg_type == INFO && retransmittion_counter<2){
+						dbg("info_ack","INFO ACK not received by mote%hhu, resending...\n",TOS_NODE_ID);
+						send_info_message(TRUE);
+						retransmittion_counter++;
+					}
 				
+				}
+				else{
+				
+					if(msg->msg_type == PAIRING_RESP && paired){
+						dbg("pairing_resp_ack","PAIRING RESP ACK received by mote%hhu\n",TOS_NODE_ID);
+						if(mote_type == CHILD){
+							dbg("info_timer","starting INFO timer on mote%hhu\n",TOS_NODE_ID);	
+							call Info_Timer.startPeriodic(info_Tms);
+						
+						}
+					}
+					if (msg->msg_type == INFO){
+						dbg("info_ack","INFO ACK received by mote%u\n",TOS_NODE_ID);
+						//retransmittion_counter=0;
+					}
+				
+				}
 			}
-		}
 		}
 		return;
 	}	
@@ -445,7 +416,7 @@ implementation {
 					last_y = rec_msg->y; 
 					
 					if(rec_msg->kinematic_status == FALLING){
-						dbg("falling_alarm", " FALLING ALERT: Child has fallen, go pick him up at position (x:%hhu, y:%u)\n",TOS_NODE_ID,last_x,last_y);
+						dbg("falling_alarm", "FALLING ALERT: Child has fallen, go pick him up at position (x:%u, y:%u)\n",last_x,last_y);
 					}
 					dbg("oor_timer", "mote%hhu started OutOfRange TIMER countdown\n",TOS_NODE_ID);
 					call OutOfRange_Timer.startOneShot(outofrange_Tms);

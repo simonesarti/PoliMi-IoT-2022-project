@@ -5,9 +5,9 @@ typedef enum {
 	AM_MY_MSG = 6
 }msg_enum;
 
-typedef enum {
-	PARENT = 0,
-	CHILD = 1
+typedef enum {	
+	CHILD = 0,
+	PARENT = 1,
 }mote_type_t;
 
 typedef enum{
