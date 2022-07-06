@@ -7,7 +7,7 @@ print ("********************************************")
 import sys
 import time
 import serial
-
+import os
 from TOSSIM import *
 
 t = Tossim([])
@@ -119,17 +119,39 @@ for i in range(0,5000):
 print ("\nSimulation finished!\n\n");
 
 
+# Serial
 
+port = '/dev/ttyS0'
 
-#configure the serial connections
-ser = serial.Serial(port ="/dev/ttyS1", baudrate=9600, rtscts=True, dsrdtr=True)  # open serial port
-print (" Serial forwarder using port: ", ser.portstr)   # check which port is being used
-#print ("\n >>remind to use this as a root!\n")
+if not os.path.exists(port):
+	os.system('touch ' + port)
+os.system('socat pty,link='+port+',raw tcp:127.0.0.1:60001&') 
+
+ser = serial.Serial("/dev/ttyS0", 9600, rtscts=True, dsrdtr=True)
+print "Serial forwarder - used port: ", ser.portstr, "\n"
+
+"""
+ser = None
+portNotOpen = True
+
+while portNotOpen:
+
+	try:
+		Path('/dev/ttyS0').touch()
+		ser = serial.Serial(port="/dev/ttyS0", timeout=1)
+		print "Serial forwarder using port: ", ser.portstr
+		portNotOpen = False
+
+	except:
+		print "Error, retrying"
+"""
+s
 ser.write("\n >serial test ALARM! \n go go ALARM! go :) ")  # write test string
 with open('simulation.txt') as fp:
-    for line in fp:
-        if "ALERT" in line:
-        	ser.write(line);	#print alerts on serial port
+	for line in fp:
+	    if "ALERT" in line:
+	    	ser.write(line);	#print alerts on serial port
+
 
 ser.close(); # close serial port
 
