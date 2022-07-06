@@ -122,36 +122,29 @@ print ("\nSimulation finished!\n\n");
 # Serial
 
 port = '/dev/ttyS0'
+portNotOk = True
 
-if not os.path.exists(port):
-	os.system('touch ' + port)
-os.system('socat pty,link='+port+',raw tcp:127.0.0.1:60001&') 
-
-ser = serial.Serial("/dev/ttyS0", 9600, rtscts=True, dsrdtr=True)
-print "Serial forwarder - used port: ", ser.portstr, "\n"
-
-"""
-ser = None
-portNotOpen = True
-
-while portNotOpen:
+while portNotOk:
 
 	try:
-		Path('/dev/ttyS0').touch()
-		ser = serial.Serial(port="/dev/ttyS0", timeout=1)
-		print "Serial forwarder using port: ", ser.portstr
-		portNotOpen = False
+		if not os.path.exists(port):
+			os.system('touch ' + port)
+		os.system('socat pty,link='+port+',raw tcp:127.0.0.1:60001&') 
 
+		ser = serial.Serial("/dev/ttyS0", 9600, rtscts=True, dsrdtr=True)
+		print "Serial forwarder - used port: ", ser.portstr, "\n"
+
+		with open('simulation.txt') as fp:
+			for line in fp:
+				if "ALERT" in line:
+					clean_line = line.split(": ",1)[1][:-1]
+					ser.write(line)
+					
+		portNotOk = False
 	except:
-		print "Error, retrying"
-"""
-s
-ser.write("\n >serial test ALARM! \n go go ALARM! go :) ")  # write test string
-with open('simulation.txt') as fp:
-	for line in fp:
-	    if "ALERT" in line:
-	    	ser.write(line);	#print alerts on serial port
-
+		print("Retry on port " + port)
+		pass
+	
 
 ser.close(); # close serial port
 
