@@ -24,7 +24,7 @@ Implement the prototype with the O.S. of your choice (including application logi
 **2. Simulation** 
 
 Simulate your implementation with 2 couples of bracelets at the same time. Your simulation should demonstrate that your code follows the
-design requirements. If you simulate using TOSSIM, you can emulate that a node goes out of range by turning it o (i.e., calling mote.turnOff() in python). In Cooja, you can simply move a node out of the communication range of the other one. 
+design requirements. If you simulate using TOSSIM, you can emulate that a node goes out of range by turning it off (i.e., calling mote.turnOff() in python). In Cooja, you can simply move a node out of the communication range of the other one. 
 
 **3. Node-Red**:
 
@@ -32,4 +32,4 @@ Attach your Tossim simulation to Node-red: alarm messages should be transmitted 
 
 
 ## Implementation and Report
-See [Report.pdf](report.pdf)
+See [Report.pdf](Report.pdf)
